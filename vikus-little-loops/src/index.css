@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    @apply bg-blush-500 text-white;
+  }
+  /* Soft layered pink background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(closest-side at 16% 20%, rgba(248, 205, 214, 0.6), transparent 68%),
+      radial-gradient(closest-side at 84% 26%, rgba(233, 224, 242, 0.55), transparent 68%),
+      radial-gradient(closest-side at 72% 82%, rgba(148, 160, 111, 0.14), transparent 70%),
+      linear-gradient(180deg, #FFF6F6, #FCEEF0);
+  }
+}
+
+@layer components {
+  .container-lux {
+    @apply mx-auto w-full max-w-[1200px] px-6 md:px-8;
+  }
+  .heading-display {
+    @apply font-display font-semibold tracking-tight text-ink;
+  }
+  /* Animated decorative blobs */
+  .blob {
+    @apply pointer-events-none fixed -z-10 rounded-full blur-3xl opacity-60;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

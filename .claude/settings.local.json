@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($env:PYTHONIOENCODING = \"utf-8\"; Set-Location \"D:\\\\vll\\\\vikus-little-loops-backend\"; & \".venv\\\\Scripts\\\\python.exe\" -m scripts.seed 2>&1)"
+    ]
+  }
+}
