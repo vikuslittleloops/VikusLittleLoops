@@ -13,6 +13,7 @@ class ReviewCreate(BaseModel):
     rating: int
     title: str | None = None
     body: str | None = None
+    photo_url: str | None = None
 
 
 class ReviewOut(BaseModel):
@@ -23,6 +24,7 @@ class ReviewOut(BaseModel):
     rating: int
     title: str | None = None
     body: str | None = None
+    photo_url: str | None = None
     is_approved: bool
     created_at: datetime
 
@@ -96,6 +98,14 @@ class FAQCreate(BaseModel):
 class FAQOut(FAQCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int
+
+
+class FAQUpdate(BaseModel):
+    question: str | None = None
+    answer: str | None = None
+    category: str | None = None
+    is_active: bool | None = None
+    sort_order: int | None = None
 
 
 class PolicyOut(BaseModel):

@@ -29,6 +29,7 @@ export const updateHomepageSection = (key, payload) =>
 
 // ---- Reviews ----
 export const getReviews = () => api.get("/admin/reviews").then((r) => r.data);
+export const createReview = (payload) => api.post("/admin/reviews", payload).then((r) => r.data);
 export const approveReview = (id) => api.patch(`/admin/reviews/${id}/approve`).then((r) => r.data);
 export const deleteReview = (id) => api.delete(`/admin/reviews/${id}`).then((r) => r.data);
 
@@ -46,6 +47,12 @@ export const setOrderStatus = (id, status) =>
   api.patch(`/admin/orders/${id}/status`, { status }).then((r) => r.data);
 export const setOrderPayment = (id, payment_status) =>
   api.patch(`/admin/orders/${id}/payment`, { payment_status }).then((r) => r.data);
+
+// ---- FAQs ----
+export const getFaqs = () => api.get("/faqs").then((r) => r.data);
+export const createFaq = (payload) => api.post("/faqs", payload).then((r) => r.data);
+export const updateFaq = (id, payload) => api.patch(`/faqs/${id}`, payload).then((r) => r.data);
+export const deleteFaq = (id) => api.delete(`/faqs/${id}`).then((r) => r.data);
 
 // ---- Uploads (Cloudinary via backend) ----
 export const uploadImage = (file) => {

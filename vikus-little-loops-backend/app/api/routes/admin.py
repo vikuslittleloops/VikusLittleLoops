@@ -12,7 +12,7 @@ from app.models.commerce import CustomOrder, Customer, Order, OrderItem
 from app.models.content import Review
 from app.schemas.admin import CustomerOut, OrderOut, PaymentUpdate, StatusUpdate
 from app.schemas.catalog import ProductListOut
-from app.schemas.misc import ReviewOut
+from app.schemas.misc import ReviewCreate, ReviewOut
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -141,6 +141,22 @@ def admin_customers(db: Session = Depends(get_db), _: Admin = Depends(get_curren
 @router.get("/reviews", response_model=list[ReviewOut])
 def admin_reviews(db: Session = Depends(get_db), _: Admin = Depends(get_current_admin)):
     return db.scalars(select(Review).order_by(Review.created_at.desc())).all()
+
+
+@router.post("/reviews", response_model=ReviewOut, status_code=status.HTTP_201_CREATED)
+def create_review_as_admin(
+    payload: ReviewCreate, db: Session = Depends(get_db), _: Admin = Depends(get_current_admin)
+):
+    """Admin-created review — approved immediately, shows on the storefront."""
+    if not (1 <= payload.rating <= 5):
+        raise HTTPException(status_code=422, detail="Rating must be 1–5")
+    if not db.get(Product, payload.product_id):
+        raise HTTPException(status_code=404, detail="Product not found")
+    obj = Review(**payload.model_dump(), is_approved=True)
+    db.add(obj)
+    db.commit()
+    db.refresh(obj)
+    return obj
 
 
 @router.patch("/reviews/{review_id}/approve", response_model=ReviewOut)

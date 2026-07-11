@@ -40,7 +40,7 @@ export default function Footer() {
               <a href="https://www.instagram.com/vikuslittleloops" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-soft transition-transform duration-500 ease-lux hover:-translate-y-1 hover:rotate-6">
                 <FaInstagram />
               </a>
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-soft transition-transform duration-500 ease-lux hover:-translate-y-1 hover:rotate-6">
+              <a href="https://wa.me/918979011405" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-soft transition-transform duration-500 ease-lux hover:-translate-y-1 hover:rotate-6">
                 <FaWhatsapp />
               </a>
               <a href="mailto:hello@vikuslittleloops.com" aria-label="Email" className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-soft transition-transform duration-500 ease-lux hover:-translate-y-1 hover:rotate-6">

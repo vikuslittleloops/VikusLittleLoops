@@ -17,6 +17,7 @@ from app.schemas.misc import (
     CustomOrderOut,
     FAQCreate,
     FAQOut,
+    FAQUpdate,
     NewsletterIn,
     NewsletterOut,
     PolicyOut,
@@ -46,6 +47,17 @@ def create_review(payload: ReviewCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(obj)
     return obj
+
+
+@router.get("/reviews/featured", response_model=list[ReviewOut])
+def featured_reviews(limit: int = 8, db: Session = Depends(get_db)):
+    """Public — latest approved reviews across all products (homepage testimonials)."""
+    return db.scalars(
+        select(Review)
+        .where(Review.is_approved.is_(True))
+        .order_by(Review.rating.desc(), Review.created_at.desc())
+        .limit(min(limit, 20))
+    ).all()
 
 
 # ---------------- Custom orders ----------------
@@ -121,6 +133,32 @@ def create_faq(payload: FAQCreate, db: Session = Depends(get_db), _: Admin = Dep
     db.commit()
     db.refresh(obj)
     return obj
+
+
+@router.patch("/faqs/{faq_id}", response_model=FAQOut)
+def update_faq(
+    faq_id: int,
+    payload: FAQUpdate,
+    db: Session = Depends(get_db),
+    _: Admin = Depends(get_current_admin),
+):
+    obj = db.get(FAQ, faq_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="FAQ not found")
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(obj, field, value)
+    db.commit()
+    db.refresh(obj)
+    return obj
+
+
+@router.delete("/faqs/{faq_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_faq(faq_id: int, db: Session = Depends(get_db), _: Admin = Depends(get_current_admin)):
+    obj = db.get(FAQ, faq_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="FAQ not found")
+    db.delete(obj)
+    db.commit()
 
 
 @router.get("/policies/{slug}", response_model=PolicyOut)

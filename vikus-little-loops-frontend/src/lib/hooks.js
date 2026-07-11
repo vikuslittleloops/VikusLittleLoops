@@ -40,3 +40,21 @@ export function useHomepage() {
     staleTime: 5 * 60 * 1000,
   });
 }
+
+// ---- Featured reviews (homepage testimonials) ----
+export function useFeaturedReviews(limit = 8) {
+  return useQuery({
+    queryKey: ["featured-reviews", limit],
+    queryFn: () => api.get("/reviews/featured", { params: { limit } }).then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+// ---- FAQs ----
+export function useFaqs() {
+  return useQuery({
+    queryKey: ["faqs"],
+    queryFn: () => api.get("/faqs").then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+}

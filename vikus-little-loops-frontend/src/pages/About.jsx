@@ -47,6 +47,16 @@ export default function About() {
   const photos = uploaded?.length ? uploaded : FALLBACK_PHOTOS;
   const gallery = hp?.about_gallery?.content?.photos || [];
 
+  // Admin-editable texts (Admin → Site Content → About Page Texts)
+  const texts = hp?.about_texts?.content || {};
+  const journeyHeading = texts.journey_heading || "Loop by Loop";
+  const creatorKicker = texts.creator_kicker || "Meet the Creator";
+  const creatorHeading = texts.creator_heading || "Hello, lovely soul ✨";
+  const creatorSignature = texts.creator_signature || "With love and gratitude,\nVarnika Agarwal 💗";
+  const creatorParagraphs = texts.creator_body
+    ? texts.creator_body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
+    : null;
+
   return (
     <main>
       <Seo title="Our Story" description="From a single ball of yarn to a tiny atelier of handmade treasures — meet the maker behind Viku's Little Loops." />
@@ -136,7 +146,7 @@ export default function About() {
         <section className="py-16">
           <div className="text-center">
             <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">Crafting Journey</span>
-            <h2 className="heading-display mt-3 text-[clamp(2rem,4.4vw,3rem)]">Loop by Loop</h2>
+            <h2 className="heading-display mt-3 text-[clamp(2rem,4.4vw,3rem)]">{journeyHeading}</h2>
           </div>
           <div className="relative mx-auto mt-14 max-w-2xl">
             <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-blush-400 to-transparent md:block" />
@@ -178,26 +188,32 @@ export default function About() {
             </div>
 
             <div>
-              <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">Meet the Creator</span>
-              <h2 className="heading-display mt-3 text-2xl sm:text-3xl">Hello, lovely soul ✨</h2>
+              <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">{creatorKicker}</span>
+              <h2 className="heading-display mt-3 text-2xl sm:text-3xl">{creatorHeading}</h2>
               <div className="mt-4 space-y-3.5 font-serif text-lg leading-relaxed text-ink-soft">
-                <p>
-                  Welcome to my cozy little corner of the internet — stitched together with love, cute
-                  vibes, and a whole lot of yarn. I'm a physicist, artist, and empath at heart, happiest
-                  when my hands are busy making something beautiful.
-                </p>
-                <p>
-                  Crochet found me during my master's as a gentle escape — a way to make gifts for
-                  friends that bloomed into a little shop of the cutest packages. For me it's about joy,
-                  not just a product: every order is hand-packed in decorated paper, sealed with cute
-                  stickers, and sprinkled with a little extra love.
-                </p>
-                <p>
-                  Here you'll find my crochet goodies alongside my hand-drawn portraits. Thank you for
-                  being here, and for letting me be a part of your story.
-                </p>
-                <p className="font-serif text-lg italic text-blush-600">
-                  With love and gratitude,<br />Varnika Agarwal 💗
+                {creatorParagraphs ? (
+                  creatorParagraphs.map((p, i) => <p key={i}>{p}</p>)
+                ) : (
+                  <>
+                    <p>
+                      Welcome to my cozy little corner of the internet — stitched together with love, cute
+                      vibes, and a whole lot of yarn. I'm a physicist, artist, and empath at heart, happiest
+                      when my hands are busy making something beautiful.
+                    </p>
+                    <p>
+                      Crochet found me during my master's as a gentle escape — a way to make gifts for
+                      friends that bloomed into a little shop of the cutest packages. For me it's about joy,
+                      not just a product: every order is hand-packed in decorated paper, sealed with cute
+                      stickers, and sprinkled with a little extra love.
+                    </p>
+                    <p>
+                      Here you'll find my crochet goodies alongside my hand-drawn portraits. Thank you for
+                      being here, and for letting me be a part of your story.
+                    </p>
+                  </>
+                )}
+                <p className="whitespace-pre-line font-serif text-lg italic text-blush-600">
+                  {creatorSignature}
                 </p>
               </div>
               <div className="mt-6"><Button to="/shop">Explore My Work</Button></div>

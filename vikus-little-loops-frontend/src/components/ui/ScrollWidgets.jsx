@@ -24,7 +24,7 @@ export default function ScrollWidgets() {
 
       {/* Floating WhatsApp */}
       <a
-        href="https://wa.me/"
+        href="https://wa.me/918979011405"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"

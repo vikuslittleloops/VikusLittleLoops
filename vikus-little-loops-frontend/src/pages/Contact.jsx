@@ -6,6 +6,7 @@ import { FaInstagram, FaWhatsapp, FaEnvelope } from "react-icons/fa";
 import Button from "@/components/ui/Button";
 import Seo from "@/components/Seo";
 import { fadeUp, stagger, reveal } from "@/lib/motion";
+import { useFaqs } from "@/lib/hooks";
 
 const schema = z.object({
   name: z.string().min(2, "Please enter your name"),
@@ -13,13 +14,16 @@ const schema = z.object({
   message: z.string().min(10, "Tell us a little more"),
 });
 
-const faqs = [
+/* Fallback until FAQs are added in Admin → Site Content. */
+const DEFAULT_FAQS = [
   ["How long does a custom order take?", "Usually 1–2 weeks depending on complexity. We'll always share a timeline before starting."],
   ["Do you ship worldwide?", "Yes! Shipping is calculated at checkout, with free gift wrapping on every order."],
   ["Can I request a specific colour?", "Absolutely — use the Custom Order page or message us on Instagram."],
 ];
 
 export default function Contact() {
+  const { data: apiFaqs } = useFaqs();
+  const faqs = apiFaqs?.length ? apiFaqs.map((f) => [f.question, f.answer]) : DEFAULT_FAQS;
   const { register, handleSubmit, reset, formState: { errors, isSubmitSuccessful } } =
     useForm({ resolver: zodResolver(schema) });
 
@@ -75,7 +79,7 @@ export default function Contact() {
           <div className="flex flex-col gap-3">
             {[
               { icon: <FaInstagram />, label: "@vikuslittleloops", href: "https://www.instagram.com/vikuslittleloops" },
-              { icon: <FaWhatsapp />, label: "Chat on WhatsApp", href: "https://wa.me/" },
+              { icon: <FaWhatsapp />, label: "Chat on WhatsApp", href: "https://wa.me/918979011405" },
               { icon: <FaEnvelope />, label: "hello@vikuslittleloops.com", href: "mailto:hello@vikuslittleloops.com" },
             ].map((c) => (
               <a key={c.label} href={c.href} target="_blank" rel="noopener noreferrer"

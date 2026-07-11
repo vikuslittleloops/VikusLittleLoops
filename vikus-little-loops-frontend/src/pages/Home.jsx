@@ -1,4 +1,5 @@
 import Hero from "@/components/home/Hero";
+import GalleryStrip from "@/components/home/GalleryStrip";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import FeaturedCategories from "@/components/home/FeaturedCategories";
 import BestSellers from "@/components/home/BestSellers";
@@ -42,6 +43,7 @@ export default function Home() {
         </div>
       </div>
 
+      <GalleryStrip />
       <WhyChooseUs />
       <FeaturedCategories />
       <BestSellers />

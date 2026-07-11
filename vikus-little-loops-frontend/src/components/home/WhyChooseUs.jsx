@@ -1,28 +1,17 @@
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { fadeUp, stagger, reveal } from "@/lib/motion";
+import { useHomepage } from "@/lib/hooks";
 
-/* ──────────────────────────────────────────────────────────────
-   Drop your real photos here (Cloudinary URLs work great).
-   Leave empty to show soft placeholder tiles until photos are ready.
-   ────────────────────────────────────────────────────────────── */
-const CUSTOM_ORDER_IMAGES = [
-  // "https://res.cloudinary.com/.../custom1.webp",
-  // "https://res.cloudinary.com/.../custom2.webp",
-];
-const PACKAGE_IMAGES = [
-  // "https://res.cloudinary.com/.../package1.webp",
-  // "https://res.cloudinary.com/.../package2.webp",
-];
-
-const FEATURES = [
+/* Defaults — overridden by whatever is saved in Admin → Site Content. */
+const DEFAULTS = [
   {
     n: "01",
     title: "Handcrafted with Love",
     text: "Every single stitch is made with care and patience, ensuring you receive a premium, unique piece.",
     emoji: "🧶",
     gradient: "from-blush-100 to-peach",
-    images: [],
+    photos: [],
   },
   {
     n: "02",
@@ -30,7 +19,7 @@ const FEATURES = [
     text: "Gladly accepting custom orders to match your exact vision.",
     emoji: "🎨",
     gradient: "from-mauve to-blush-200",
-    images: CUSTOM_ORDER_IMAGES,
+    photos: [],
   },
   {
     n: "03",
@@ -38,21 +27,29 @@ const FEATURES = [
     text: "Opening your order feels like receiving a warm hug.",
     emoji: "🎁",
     gradient: "from-lavender to-blush-100",
-    images: PACKAGE_IMAGES,
+    photos: [],
   },
 ];
 
 function ImageArea({ feature }) {
-  if (feature.images.length === 0) {
+  const photos = feature.photos || [];
+  if (photos.length === 0) {
     return (
       <div className={`relative grid h-56 place-items-center overflow-hidden rounded-xl2 bg-gradient-to-br ${feature.gradient}`}>
         <span className="text-6xl opacity-90">{feature.emoji}</span>
       </div>
     );
   }
+  if (photos.length === 1) {
+    return (
+      <div className="h-56 overflow-hidden rounded-xl2">
+        <img src={photos[0]} alt={feature.title} loading="lazy" className="h-full w-full object-cover" />
+      </div>
+    );
+  }
   return (
     <div className="grid h-56 grid-cols-2 gap-2 overflow-hidden rounded-xl2">
-      {feature.images.slice(0, 2).map((src, i) => (
+      {photos.slice(0, 2).map((src, i) => (
         <img key={i} src={src} alt={feature.title} loading="lazy" className="h-full w-full object-cover" />
       ))}
     </div>
@@ -60,6 +57,16 @@ function ImageArea({ feature }) {
 }
 
 export default function WhyChooseUs() {
+  const { data: hp } = useHomepage();
+  const saved = hp?.why_choose_us?.content?.items;
+
+  const features = DEFAULTS.map((d, i) => ({
+    ...d,
+    ...(saved?.[i]?.title ? { title: saved[i].title } : {}),
+    ...(saved?.[i]?.text ? { text: saved[i].text } : {}),
+    photos: saved?.[i]?.photos?.length ? saved[i].photos : d.photos,
+  }));
+
   return (
     <section className="container-lux py-24">
       <SectionHeading
@@ -69,7 +76,7 @@ export default function WhyChooseUs() {
       />
 
       <motion.div variants={stagger} {...reveal} className="grid gap-8 md:grid-cols-3">
-        {FEATURES.map((f) => (
+        {features.map((f) => (
           <motion.article
             key={f.n}
             variants={fadeUp}

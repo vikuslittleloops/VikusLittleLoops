@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
+import Slideshow from "@/components/ui/Slideshow";
 import { easeLux } from "@/lib/motion";
 import { useHomepage } from "@/lib/hooks";
 
@@ -50,6 +51,7 @@ export default function Hero() {
     "Discover cozy, one-of-a-kind crochet creations stitched just for you. From my hands to your home, every package is thoughtfully crafted to brighten your day and beautifully packaged for an exceptional unboxing experience.";
   const ctaPrimary = hc.cta_primary || "Shop Our Creations";
   const ctaSecondary = hc.cta_secondary || "Explore the Collection";
+  const slides = hp?.hero_slideshow?.content?.photos || [];
 
   useEffect(() => {
     const onMove = (e) =>
@@ -106,6 +108,21 @@ export default function Hero() {
         >
           {subtitle}
         </motion.p>
+
+        {slides.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, ease: easeLux, delay: 1.0 }}
+            className="mx-auto mt-8 max-w-2xl sm:mt-10"
+          >
+            <Slideshow
+              photos={slides}
+              interval={1000}
+              className="aspect-[16/9] w-full rounded-xl3 border border-blush-200/60 shadow-lift"
+            />
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

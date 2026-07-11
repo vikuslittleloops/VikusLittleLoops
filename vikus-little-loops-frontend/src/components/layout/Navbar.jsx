@@ -5,6 +5,7 @@ import { FiShoppingBag, FiHeart, FiMenu, FiX, FiUser } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCustomerAuth } from "@/context/CustomerAuthContext";
+import { useHomepage } from "@/lib/hooks";
 
 const links = [
   { to: "/shop", label: "Shop" },
@@ -20,6 +21,8 @@ export default function Navbar() {
   const { count, setOpen: setCartOpen } = useCart();
   const { count: wishCount } = useWishlist();
   const { isAuthed } = useCustomerAuth();
+  const { data: hp } = useHomepage();
+  const logoUrl = hp?.branding?.content?.logo_url;
 
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 60);
@@ -41,9 +44,17 @@ export default function Navbar() {
     >
       <div className="container-lux flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5 lg:gap-3">
-          <span className="grid h-9 w-9 lg:h-10 lg:w-10 animate-spin-slow place-items-center rounded-full bg-[conic-gradient(from_210deg,#DC6B86,#F8CDD6,#FBE0CF,#94A06F,#DC6B86)] text-white shadow-soft">
-            ✿
-          </span>
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt="Viku's Little Loops"
+              className="h-9 w-9 rounded-full object-cover shadow-soft lg:h-10 lg:w-10"
+            />
+          ) : (
+            <span className="grid h-9 w-9 lg:h-10 lg:w-10 animate-spin-slow place-items-center rounded-full bg-[conic-gradient(from_210deg,#DC6B86,#F8CDD6,#FBE0CF,#94A06F,#DC6B86)] text-white shadow-soft">
+              ✿
+            </span>
+          )}
           <span className="font-display text-base lg:text-xl font-semibold leading-tight">
             Viku's Little Loops
           </span>

@@ -17,6 +17,7 @@ class Review(Base, TimestampMixin):
     rating: Mapped[int] = mapped_column(Integer, nullable=False)  # 1..5
     title: Mapped[str | None] = mapped_column(String(160))
     body: Mapped[str | None] = mapped_column(Text)
+    photo_url: Mapped[str | None] = mapped_column(String(500))
     is_approved: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     product: Mapped["Product"] = relationship(back_populates="reviews")  # type: ignore[name-defined]  # noqa: F821
