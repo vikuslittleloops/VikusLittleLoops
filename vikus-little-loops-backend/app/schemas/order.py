@@ -25,6 +25,10 @@ class CheckoutRequest(BaseModel):
     items: list[CheckoutItem]
 
 
+class PaymentRefIn(BaseModel):
+    reference: str = Field(min_length=4, max_length=64)
+
+
 class OrderItemPublic(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     product_name: str
@@ -42,6 +46,7 @@ class OrderPublic(BaseModel):
     discount_amount: Decimal
     shipping_amount: Decimal
     total: Decimal
+    payment_reference: str | None = None
     ship_name: str | None = None
     created_at: datetime
     items: list[OrderItemPublic] = []

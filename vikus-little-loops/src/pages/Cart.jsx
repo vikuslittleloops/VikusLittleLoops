@@ -21,34 +21,36 @@ export default function Cart() {
     );
 
   return (
-    <main className="container-lux pb-28 pt-36">
+    <main className="container-lux pb-16 pt-28 sm:pb-28 sm:pt-36">
       <h1 className="heading-display mb-10 text-[clamp(2.2rem,5vw,3.2rem)]">Your Cart</h1>
       <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr]">
-        <div className="space-y-5">
+        <div className="space-y-4">
           {items.map((i) => (
             <motion.div
               key={i.product_id}
               layout
-              className="flex items-center gap-5 rounded-xl2 border border-blush-200/50 bg-ivory/70 p-5 shadow-soft"
+              className="flex items-start gap-4 rounded-xl2 border border-blush-200/50 bg-ivory/70 p-4 shadow-soft sm:items-center sm:gap-5 sm:p-5"
             >
-              <Link to={`/product/${i.slug}`} className="grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-xl bg-blush-100">
-                {i.image ? <img src={i.image} alt={i.name} className="h-full w-full object-cover" /> : <span className="text-4xl">{i.emoji}</span>}
+              <Link to={`/product/${i.slug}`} className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-xl bg-blush-100 sm:h-24 sm:w-24">
+                {i.image ? <img src={i.image} alt={i.name} className="h-full w-full object-cover" /> : <span className="text-3xl sm:text-4xl">{i.emoji}</span>}
               </Link>
-              <div className="flex-1">
-                <Link to={`/product/${i.slug}`} className="font-display text-lg">{i.name}</Link>
+              <div className="flex flex-1 flex-col gap-1">
+                <div className="flex items-start justify-between gap-2">
+                  <Link to={`/product/${i.slug}`} className="font-display text-base leading-snug sm:text-lg">{i.name}</Link>
+                  <p className="shrink-0 font-serif text-base font-semibold sm:text-xl">{inr(i.price * i.quantity)}</p>
+                </div>
                 <p className="text-sm text-ink-soft">{inr(i.price)}</p>
-                <div className="mt-3 flex items-center gap-4">
+                <div className="mt-2 flex items-center gap-3">
                   <div className="flex items-center rounded-full border border-blush-300/60 bg-white/60">
-                    <button onClick={() => setQty(i.product_id, i.quantity - 1)} className="px-3 py-1.5"><FiMinus size={14} /></button>
+                    <button onClick={() => setQty(i.product_id, i.quantity - 1)} className="flex h-9 w-9 items-center justify-center"><FiMinus size={14} /></button>
                     <span className="w-7 text-center text-sm">{i.quantity}</span>
-                    <button onClick={() => setQty(i.product_id, i.quantity + 1)} className="px-3 py-1.5"><FiPlus size={14} /></button>
+                    <button onClick={() => setQty(i.product_id, i.quantity + 1)} className="flex h-9 w-9 items-center justify-center"><FiPlus size={14} /></button>
                   </div>
                   <button onClick={() => remove(i.product_id)} className="flex items-center gap-1.5 text-sm text-warmgray hover:text-blush-600">
                     <FiTrash2 size={15} /> Remove
                   </button>
                 </div>
               </div>
-              <p className="font-serif text-xl font-semibold">{inr(i.price * i.quantity)}</p>
             </motion.div>
           ))}
         </div>

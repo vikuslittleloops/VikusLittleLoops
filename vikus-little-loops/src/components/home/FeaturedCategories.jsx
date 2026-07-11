@@ -1,8 +1,32 @@
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { fadeUp, stagger, reveal } from "@/lib/motion";
 import { useCategories } from "@/lib/hooks";
+
+// Subtle mouse-follow 3D tilt.
+function TiltCard({ children }) {
+  const ref = useRef(null);
+  const [t, setT] = useState("");
+  const onMove = (e) => {
+    const r = ref.current.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    setT(`perspective(1000px) rotateY(${px * 9}deg) rotateX(${-py * 9}deg)`);
+  };
+  return (
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={() => setT("")}
+      style={{ transform: t, transition: "transform .35s cubic-bezier(.16,1,.3,1)" }}
+      className="h-full will-change-transform"
+    >
+      {children}
+    </div>
+  );
+}
 
 const GRADIENTS = [
   "from-blush-200 to-peach",
@@ -42,6 +66,7 @@ export default function FeaturedCategories() {
         >
           {categories.map((c, i) => (
             <motion.div key={c.id} variants={fadeUp}>
+              <TiltCard>
               <Link
                 to={`/shop?category=${c.id}`}
                 className={`group relative flex min-h-[280px] flex-col justify-end overflow-hidden rounded-xl2 bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]} p-8 text-ink shadow-soft transition-shadow duration-500 ease-lux hover:shadow-lift`}
@@ -61,6 +86,7 @@ export default function FeaturedCategories() {
                   </span>
                 </div>
               </Link>
+              </TiltCard>
             </motion.div>
           ))}
         </motion.div>

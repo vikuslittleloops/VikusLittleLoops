@@ -24,10 +24,11 @@ export default function CartDrawer() {
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-y-0 right-0 z-[95] flex w-full max-w-md flex-col bg-cream shadow-2xl"
+            style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
           >
             <div className="flex items-center justify-between border-b border-blush-200/50 px-6 py-5">
               <h3 className="font-display text-xl font-semibold">Your Cart ({count})</h3>
-              <button onClick={() => setOpen(false)} aria-label="Close" className="text-ink-soft hover:text-blush-600">
+              <button onClick={() => setOpen(false)} aria-label="Close" className="flex h-10 w-10 items-center justify-center rounded-full text-ink-soft hover:bg-blush-50 hover:text-blush-600">
                 <FiX size={22} />
               </button>
             </div>
@@ -59,11 +60,11 @@ export default function CartDrawer() {
                         <p className="text-sm text-ink-soft">{inr(i.price)}</p>
                         <div className="mt-2 flex items-center gap-3">
                           <div className="flex items-center rounded-full border border-blush-300/60">
-                            <button onClick={() => setQty(i.product_id, i.quantity - 1)} className="px-2.5 py-1"><FiMinus size={13} /></button>
+                            <button onClick={() => setQty(i.product_id, i.quantity - 1)} className="flex h-9 w-9 items-center justify-center"><FiMinus size={13} /></button>
                             <span className="w-6 text-center text-sm">{i.quantity}</span>
-                            <button onClick={() => setQty(i.product_id, i.quantity + 1)} className="px-2.5 py-1"><FiPlus size={13} /></button>
+                            <button onClick={() => setQty(i.product_id, i.quantity + 1)} className="flex h-9 w-9 items-center justify-center"><FiPlus size={13} /></button>
                           </div>
-                          <button onClick={() => remove(i.product_id)} className="text-warmgray hover:text-blush-600"><FiTrash2 size={16} /></button>
+                          <button onClick={() => remove(i.product_id)} className="flex h-9 w-9 items-center justify-center text-warmgray hover:text-blush-600"><FiTrash2 size={16} /></button>
                         </div>
                       </div>
                       <p className="font-serif text-base font-medium">{inr(i.price * i.quantity)}</p>

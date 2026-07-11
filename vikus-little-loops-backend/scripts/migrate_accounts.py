@@ -14,6 +14,7 @@ STATEMENTS = [
     "ALTER TABLE customers ADD COLUMN IF NOT EXISTS google_id VARCHAR(64)",
     "ALTER TABLE customers ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500)",
     "ALTER TABLE orders ADD COLUMN IF NOT EXISTS ship_email VARCHAR(255)",
+    "ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_reference VARCHAR(64)",
     "CREATE UNIQUE INDEX IF NOT EXISTS ix_customers_google_id ON customers (google_id)",
     "CREATE INDEX IF NOT EXISTS ix_orders_ship_email ON orders (ship_email)",
 ]

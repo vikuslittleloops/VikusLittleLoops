@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiSearch } from "react-icons/fi";
 import ProductCard from "@/components/ui/ProductCard";
+import Seo from "@/components/Seo";
 import { stagger } from "@/lib/motion";
 import { useProducts, useCategories } from "@/lib/hooks";
 
@@ -38,15 +39,16 @@ export default function Shop() {
   };
 
   return (
-    <main className="container-lux pb-28 pt-36">
-      <header className="mb-12 text-center">
+    <main className="container-lux pb-16 pt-28 sm:pb-28 sm:pt-36">
+      <Seo title="Shop" description="Browse all handmade crochet pieces — tulips, sakura charms, hairbands, bag charms, rings, and curated gift sets." />
+      <header className="mb-8 text-center sm:mb-12">
         <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">The Boutique</span>
-        <h1 className="heading-display mt-3 text-[clamp(2.2rem,5vw,3.4rem)]">Shop All Handmade</h1>
+        <h1 className="heading-display mt-3 text-[clamp(2rem,5vw,3.4rem)]">Shop All Handmade</h1>
       </header>
 
       {/* Toolbar */}
-      <div className="mb-10 flex flex-col items-center justify-between gap-5 lg:flex-row">
-        <div className="flex flex-wrap justify-center gap-2.5">
+      <div className="mb-8 flex flex-col gap-4 sm:mb-10">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5">
           <Chip label="All" active={!categoryId} onClick={() => setParam("category", "")} />
           {categories?.map((c) => (
             <Chip
@@ -60,20 +62,20 @@ export default function Shop() {
         <div className="flex items-center gap-3">
           <form
             onSubmit={(e) => { e.preventDefault(); }}
-            className="flex items-center gap-2 rounded-full border border-blush-300/50 bg-white/70 px-4 py-2.5"
+            className="flex flex-1 items-center gap-2 rounded-full border border-blush-300/50 bg-white/70 px-4 py-2.5"
           >
-            <FiSearch className="text-warmgray" />
+            <FiSearch className="shrink-0 text-warmgray" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search…"
-              className="w-32 bg-transparent text-sm outline-none placeholder:text-warmgray"
+              className="w-full bg-transparent text-sm outline-none placeholder:text-warmgray"
             />
           </form>
           <select
             value={sort}
             onChange={(e) => setParam("sort", e.target.value)}
-            className="rounded-full border border-blush-300/50 bg-white/70 px-4 py-2.5 text-sm outline-none"
+            className="rounded-full border border-blush-300/50 bg-white/70 px-3 py-2.5 text-sm outline-none sm:px-4"
           >
             {SORTS.map(([v, l]) => (
               <option key={v} value={v}>{l}</option>
@@ -87,9 +89,9 @@ export default function Shop() {
           Couldn't load products. Is the backend running?
         </div>
       ) : isLoading ? (
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="h-[420px] animate-pulse rounded-xl2 bg-blush-100/60" />
+            <div key={i} className="h-[260px] animate-pulse rounded-xl2 bg-blush-100/60 sm:h-[420px]" />
           ))}
         </div>
       ) : products.length === 0 ? (
@@ -103,7 +105,7 @@ export default function Shop() {
           variants={stagger}
           initial="hidden"
           animate="show"
-          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 xl:grid-cols-4"
         >
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />

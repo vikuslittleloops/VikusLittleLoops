@@ -12,6 +12,7 @@ import CustomOrders from "@/admin/pages/CustomOrders";
 import Orders from "@/admin/pages/Orders";
 import Customers from "@/admin/pages/Customers";
 import Reviews from "@/admin/pages/Reviews";
+import Homepage from "@/admin/pages/Homepage";
 
 function Shell({ children }) {
   return (
@@ -34,6 +35,7 @@ export default function AdminApp() {
       <Route path="coupons" element={<Shell><Coupons /></Shell>} />
       <Route path="custom-orders" element={<Shell><CustomOrders /></Shell>} />
       <Route path="reviews" element={<Shell><Reviews /></Shell>} />
+      <Route path="homepage" element={<Shell><Homepage /></Shell>} />
       <Route path="orders" element={<Shell><Orders /></Shell>} />
       <Route path="customers" element={<Shell><Customers /></Shell>} />
     </Routes>

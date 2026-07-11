@@ -20,6 +20,7 @@ class OrderOut(BaseModel):
     order_number: str
     status: str
     payment_status: str
+    payment_reference: str | None = None
     subtotal: Decimal
     discount_amount: Decimal
     shipping_amount: Decimal
@@ -48,3 +49,7 @@ class CustomerOut(BaseModel):
 
 class StatusUpdate(BaseModel):
     status: str
+
+
+class PaymentUpdate(BaseModel):
+    payment_status: str  # unpaid | verifying | paid | failed

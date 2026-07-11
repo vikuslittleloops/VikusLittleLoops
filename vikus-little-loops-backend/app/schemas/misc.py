@@ -105,3 +105,23 @@ class PolicyOut(BaseModel):
     title: str
     body: str
     is_active: bool
+
+
+# ---------- Homepage sections ----------
+class HomepageSectionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    key: str
+    title: str | None = None
+    subtitle: str | None = None
+    content: dict = {}
+    is_active: bool
+    sort_order: int
+
+
+class HomepageSectionUpdate(BaseModel):
+    title: str | None = None
+    subtitle: str | None = None
+    content: dict | None = None
+    is_active: bool | None = None
+    sort_order: int | None = None

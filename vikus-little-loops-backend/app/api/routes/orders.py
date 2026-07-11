@@ -10,7 +10,7 @@ from app.api.deps import get_optional_customer
 from app.core.database import get_db
 from app.models.catalog import Product
 from app.models.commerce import Coupon, Customer, Order, OrderItem
-from app.schemas.order import CheckoutRequest, OrderPublic
+from app.schemas.order import CheckoutRequest, OrderPublic, PaymentRefIn
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -37,10 +37,16 @@ def create_order(
         product = db.get(Product, item.product_id)
         if not product or not product.is_published:
             raise HTTPException(status_code=404, detail=f"Product {item.product_id} unavailable")
+        if product.stock < item.quantity:
+            raise HTTPException(
+                status_code=409,
+                detail=f"Only {product.stock} left of {product.name}. Please update your cart.",
+            )
         unit = Decimal(str(product.price))
         if product.discount_percent:
             unit = (unit * (Decimal(100) - product.discount_percent) / Decimal(100)).quantize(Decimal("0.01"))
         subtotal += unit * item.quantity
+        product.stock -= item.quantity  # reserve inventory
         order_items.append(OrderItem(
             product_id=product.id,
             variant_id=item.variant_id,
@@ -92,6 +98,24 @@ def create_order(
     db.commit()
 
     order = db.scalar(select(Order).options(selectinload(Order.items)).where(Order.id == order.id))
+    return order
+
+
+@router.post("/{order_number}/payment", response_model=OrderPublic)
+def submit_payment_reference(
+    order_number: str, payload: PaymentRefIn, db: Session = Depends(get_db)
+):
+    """Customer submits their UPI transaction/UTR reference after paying.
+    Marks the order as 'verifying' until an admin confirms it."""
+    order = db.scalar(select(Order).where(Order.order_number == order_number))
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    order.payment_reference = payload.reference.strip()
+    order.payment_status = "verifying"
+    db.commit()
+    order = db.scalar(
+        select(Order).options(selectinload(Order.items)).where(Order.id == order.id)
+    )
     return order
 
 

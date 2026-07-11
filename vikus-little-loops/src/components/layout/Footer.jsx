@@ -9,17 +9,20 @@ const cols = [
 
 export default function Footer() {
   return (
-    <footer className="relative mt-16 border-t border-blush-200/50 pb-12 pt-20">
+    <footer className="relative mt-16 border-t border-blush-200/50 pb-12 pt-12 sm:pt-20">
       <div className="container-lux">
         {/* Big outlined wordmark */}
         <p
-          className="select-none text-center font-display text-[clamp(2.6rem,11vw,9rem)] font-bold leading-none tracking-tight text-transparent"
-          style={{ WebkitTextStroke: "1.3px rgba(220,107,134,0.4)" }}
+          className="select-none text-center font-display font-bold leading-none tracking-tight text-transparent"
+          style={{
+            fontSize: "clamp(2rem, 11vw, 9rem)",
+            WebkitTextStroke: "1.3px rgba(220,107,134,0.4)"
+          }}
         >
           Little Loops
         </p>
 
-        <div className="mt-16 grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+        <div className="mt-10 grid grid-cols-2 gap-8 sm:mt-16 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <div className="flex items-center gap-3">
               <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-blush-400 to-blush-600 text-white">

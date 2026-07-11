@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiChevronDown, FiMapPin, FiPhone, FiMail, FiFileText } from "react-icons/fi";
-import { getOrders, setOrderStatus } from "@/admin/lib/adminApi";
+import { FiChevronDown, FiMapPin, FiPhone, FiMail, FiFileText, FiCheck } from "react-icons/fi";
+import { getOrders, setOrderStatus, setOrderPayment } from "@/admin/lib/adminApi";
 import { PageTitle, Panel, Spinner, EmptyState, StatusPill, Th, Td } from "@/admin/components/AdminUI";
 
 const STATUSES = ["pending", "confirmed", "crafting", "shipped", "delivered", "cancelled"];
@@ -17,10 +17,14 @@ export default function Orders() {
     mutationFn: ({ id, status }) => setOrderStatus(id, status),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["orders"] }),
   });
+  const setPayment = useMutation({
+    mutationFn: ({ id, payment_status }) => setOrderPayment(id, payment_status),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["orders"] }),
+  });
 
   return (
     <>
-      <PageTitle title="Orders" subtitle="Click an order to see full customer & item details" />
+      <PageTitle title="Orders" subtitle="Click an order to see customer, items & verify payment" />
       {isLoading ? (
         <Spinner />
       ) : !data?.length ? (
@@ -35,7 +39,7 @@ export default function Orders() {
             </thead>
             <tbody className="divide-y divide-white/5">
               {data.map((o) => (
-                <Row key={o.id} o={o} open={openId === o.id} onToggle={() => setOpenId(openId === o.id ? null : o.id)} setStatus={setStatus} />
+                <Row key={o.id} o={o} open={openId === o.id} onToggle={() => setOpenId(openId === o.id ? null : o.id)} setStatus={setStatus} setPayment={setPayment} />
               ))}
             </tbody>
           </table>
@@ -45,7 +49,7 @@ export default function Orders() {
   );
 }
 
-function Row({ o, open, onToggle, setStatus }) {
+function Row({ o, open, onToggle, setStatus, setPayment }) {
   return (
     <>
       <tr className="cursor-pointer hover:bg-white/5" onClick={onToggle}>
@@ -137,6 +141,32 @@ function Row({ o, open, onToggle, setStatus }) {
                       <p className="pt-1 text-xs text-blush-200/40">
                         Placed {new Date(o.created_at).toLocaleString()}
                       </p>
+                    </div>
+
+                    {/* Payment verification */}
+                    <div className="mt-5 rounded-xl border border-white/5 bg-[#1c1522] p-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-[0.7rem] uppercase tracking-wider text-blush-200/40">Payment</h4>
+                        <StatusPill status={o.payment_status} />
+                      </div>
+                      <p className="mt-2 text-sm text-blush-50">
+                        UPI reference:{" "}
+                        <span className="font-mono">{o.payment_reference || "— not submitted —"}</span>
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <button
+                          onClick={() => setPayment.mutate({ id: o.id, payment_status: "paid" })}
+                          className="flex items-center gap-1.5 rounded-lg bg-emerald-500/15 px-3 py-2 text-xs text-emerald-300 hover:bg-emerald-500/25"
+                        >
+                          <FiCheck size={14} /> Mark Paid (confirm order)
+                        </button>
+                        <button
+                          onClick={() => setPayment.mutate({ id: o.id, payment_status: "unpaid" })}
+                          className="rounded-lg bg-white/5 px-3 py-2 text-xs text-blush-200/70 hover:bg-white/10"
+                        >
+                          Reset to Unpaid
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

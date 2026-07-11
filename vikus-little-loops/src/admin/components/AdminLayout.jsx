@@ -2,12 +2,13 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FiGrid, FiBox, FiTag, FiLayers, FiGift, FiHeart, FiShoppingBag,
-  FiUsers, FiStar, FiLogOut, FiMenu, FiX, FiExternalLink,
+  FiUsers, FiStar, FiHome, FiLogOut, FiMenu, FiX, FiExternalLink,
 } from "react-icons/fi";
 import { useAuth } from "@/admin/context/AuthContext";
 
 const nav = [
   { to: "/admin", label: "Dashboard", icon: FiGrid, end: true },
+  { to: "/admin/homepage", label: "Homepage", icon: FiHome },
   { to: "/admin/products", label: "Products", icon: FiBox },
   { to: "/admin/categories", label: "Categories", icon: FiTag },
   { to: "/admin/collections", label: "Collections", icon: FiLayers },

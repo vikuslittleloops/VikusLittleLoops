@@ -56,7 +56,7 @@ export default function ProductCard({ product }) {
       className="group relative overflow-hidden rounded-xl2 bg-ivory shadow-soft"
     >
       <Link to={`/product/${p.slug}`} className="block">
-        <div className={`relative h-[300px] overflow-hidden bg-gradient-to-br ${p.gradient}`}>
+        <div className={`relative h-[220px] overflow-hidden bg-gradient-to-br ${p.gradient} sm:h-[300px]`}>
           {p.image ? (
             <img
               src={p.image}
@@ -89,39 +89,41 @@ export default function ProductCard({ product }) {
           <button
             onClick={addToCart}
             disabled={out}
-            className="absolute inset-x-4 bottom-4 z-10 flex translate-y-5 items-center justify-center gap-2 rounded-2xl bg-ink/90 py-3.5 text-center text-[0.74rem] uppercase tracking-[0.12em] text-white opacity-0 backdrop-blur transition-all duration-500 ease-lux hover:bg-blush-600 group-hover:translate-y-0 group-hover:opacity-100 disabled:opacity-40"
+            className="absolute inset-x-2 bottom-2 z-10 flex translate-y-0 items-center justify-center gap-1.5 rounded-xl bg-ink/90 py-2.5 text-center text-[0.68rem] uppercase tracking-[0.1em] text-white opacity-100 backdrop-blur transition-all duration-500 ease-lux hover:bg-blush-600 sm:inset-x-4 sm:bottom-4 sm:translate-y-5 sm:rounded-2xl sm:py-3.5 sm:text-[0.74rem] sm:tracking-[0.12em] sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 disabled:opacity-40"
           >
-            <FiShoppingBag size={15} /> {out ? "Sold out" : "Add to Cart"}
+            <FiShoppingBag size={13} className="shrink-0" />
+            <span className="sm:hidden">{out ? "Sold" : "Add"}</span>
+            <span className="hidden sm:inline">{out ? "Sold out" : "Add to Cart"}</span>
           </button>
         </div>
       </Link>
 
-      <div className="absolute right-3.5 top-3.5 z-20 flex flex-col gap-2">
+      <div className="absolute right-2 top-2 z-20 flex flex-col gap-1.5 sm:right-3.5 sm:top-3.5 sm:gap-2">
         <button
           onClick={toggleWish}
           aria-label="Add to wishlist"
-          className="grid h-10 w-10 -translate-y-2 place-items-center rounded-full bg-white/90 text-warmgray opacity-0 shadow-soft backdrop-blur transition-all duration-500 ease-lux hover:scale-110 group-hover:translate-y-0 group-hover:opacity-100"
+          className="grid h-8 w-8 place-items-center rounded-full bg-white/90 text-warmgray opacity-100 shadow-soft backdrop-blur transition-all duration-500 ease-lux hover:scale-110 sm:h-10 sm:w-10 sm:-translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
         >
-          <FiHeart className={wished ? "fill-blush-500 text-blush-500" : ""} size={18} />
+          <FiHeart className={wished ? "fill-blush-500 text-blush-500" : ""} size={15} />
         </button>
         <button
           onClick={quickView}
           aria-label="Quick view"
-          className="grid h-10 w-10 -translate-y-2 place-items-center rounded-full bg-white/90 text-warmgray opacity-0 shadow-soft backdrop-blur transition-all delay-75 duration-500 ease-lux hover:scale-110 hover:text-blush-600 group-hover:translate-y-0 group-hover:opacity-100"
+          className="hidden h-10 w-10 place-items-center rounded-full bg-white/90 text-warmgray shadow-soft backdrop-blur transition-all delay-75 duration-500 ease-lux hover:scale-110 hover:text-blush-600 sm:grid sm:-translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
         >
           <FiEye size={18} />
         </button>
       </div>
 
-      <div className="p-6">
-        <p className="text-[0.68rem] uppercase tracking-[0.16em] text-olive-deep">{p.categoryName}</p>
-        <h3 className="mt-1.5 font-display text-xl font-medium">
+      <div className="p-3 sm:p-6">
+        <p className="text-[0.6rem] uppercase tracking-[0.14em] text-olive-deep sm:text-[0.68rem] sm:tracking-[0.16em]">{p.categoryName}</p>
+        <h3 className="mt-1 font-display text-[0.85rem] font-medium leading-snug sm:mt-1.5 sm:text-xl">
           <Link to={`/product/${p.slug}`}>{p.name}</Link>
         </h3>
-        <div className="mt-2 font-serif text-2xl font-semibold">
+        <div className="mt-1 font-serif text-base font-semibold sm:mt-2 sm:text-2xl">
           {inr(p.displayPrice)}
           {p.oldPrice && (
-            <span className="ml-2 text-base font-normal text-warmgray line-through">{inr(p.oldPrice)}</span>
+            <span className="ml-1.5 text-xs font-normal text-warmgray line-through sm:ml-2 sm:text-base">{inr(p.oldPrice)}</span>
           )}
         </div>
       </div>

@@ -145,8 +145,23 @@ def run():
                 db.add(Inventory(variant_id=v.id, quantity=4))
 
         # Homepage sections
-        for key, title in [("hero", "Handmade With Love, Crafted Forever."),
-                           ("best_sellers", "Loved a Little Extra"),
+        if not db.query(HomepageSection).filter_by(key="hero").first():
+            db.add(HomepageSection(
+                key="hero",
+                title="Handcrafted with love.",
+                subtitle=(
+                    "Discover cozy, one-of-a-kind crochet creations stitched just for you. "
+                    "From my hands to your home, every package is thoughtfully crafted to "
+                    "brighten your day and beautifully packaged for an exceptional unboxing experience."
+                ),
+                content={
+                    "eyebrow": "Handmade Luxury · Crochet Atelier",
+                    "title_accent": "Delivered with Charm",
+                    "cta_primary": "Shop Our Creations",
+                    "cta_secondary": "Explore the Collection",
+                },
+            ))
+        for key, title in [("best_sellers", "Loved a Little Extra"),
                            ("instagram", "From the Atelier")]:
             if not db.query(HomepageSection).filter_by(key=key).first():
                 db.add(HomepageSection(key=key, title=title, content={}))

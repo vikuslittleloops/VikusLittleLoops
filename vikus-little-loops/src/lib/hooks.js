@@ -31,3 +31,12 @@ export function useCollections() {
     queryFn: () => api.get("/collections").then((r) => r.data),
   });
 }
+
+// ---- Homepage (admin-editable content) ----
+export function useHomepage() {
+  return useQuery({
+    queryKey: ["homepage"],
+    queryFn: () => api.get("/homepage").then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+}

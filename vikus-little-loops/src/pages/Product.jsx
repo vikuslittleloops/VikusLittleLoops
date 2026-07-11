@@ -13,6 +13,7 @@ import { useToast } from "@/context/ToastContext";
 import { pushRecentlyViewed } from "@/lib/recentlyViewed";
 import Reviews from "@/components/product/Reviews";
 import RecentlyViewed from "@/components/product/RecentlyViewed";
+import Seo from "@/components/Seo";
 
 export default function Product() {
   const { slug } = useParams();
@@ -76,7 +77,13 @@ export default function Product() {
   };
 
   return (
-    <main className="container-lux pb-28 pt-36">
+    <main className="container-lux pb-16 pt-28 sm:pb-28 sm:pt-36">
+      <Seo
+        title={p.name}
+        description={data.short_description || data.long_description || `${p.name} — handmade crochet by Viku's Little Loops.`}
+        image={p.image}
+        type="product"
+      />
       <Link to="/shop" className="text-sm text-ink-soft hover:text-blush-600">← Back to shop</Link>
 
       <div className="mt-6 grid gap-12 lg:grid-cols-2">
@@ -95,7 +102,7 @@ export default function Product() {
             )}
           </motion.div>
           {images.length > 1 && (
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-wrap gap-3">
               {images.map((im, i) => (
                 <button
                   key={im.id || i}
@@ -149,26 +156,26 @@ export default function Product() {
           {/* Quantity */}
           <motion.div variants={fadeUp} className="mt-7 flex items-center gap-4">
             <div className="flex items-center rounded-full border border-blush-300/60 bg-white/60">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="px-4 py-2 text-lg">−</button>
+              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="flex h-12 w-12 items-center justify-center text-lg">−</button>
               <span className="w-8 text-center">{qty}</span>
-              <button onClick={() => setQty((q) => q + 1)} className="px-4 py-2 text-lg">+</button>
+              <button onClick={() => setQty((q) => q + 1)} className="flex h-12 w-12 items-center justify-center text-lg">+</button>
             </div>
             <span className="font-serif text-lg text-ink-soft">{inr(p.displayPrice * qty)}</span>
           </motion.div>
 
           {/* CTA */}
-          <motion.div variants={fadeUp} className="mt-7 flex items-center gap-4">
-            <Button size="lg" onClick={addToCart} className={out ? "pointer-events-none opacity-50" : ""}>
+          <motion.div variants={fadeUp} className="mt-7 flex flex-wrap items-center gap-3">
+            <Button size="lg" onClick={addToCart} className={`flex-1 justify-center sm:flex-none ${out ? "pointer-events-none opacity-50" : ""}`}>
               {out ? "Sold Out" : "Add to Cart"}
             </Button>
             <button
               onClick={() => { addToCart(); navigate("/cart"); }}
               disabled={out}
-              className="rounded-full border border-blush-300/60 bg-white/60 px-7 py-4 text-[0.84rem] uppercase tracking-[0.12em] text-ink transition hover:bg-white disabled:opacity-50"
+              className="flex-1 rounded-full border border-blush-300/60 bg-white/60 px-5 py-4 text-[0.84rem] uppercase tracking-[0.12em] text-ink transition hover:bg-white disabled:opacity-50 sm:flex-none sm:px-7"
             >
               Buy Now
             </button>
-            <button onClick={toggleWish} aria-label="Save to wishlist" className="grid h-14 w-14 place-items-center rounded-full border border-blush-300/60 bg-white/60 text-ink-soft transition-colors hover:text-blush-600">
+            <button onClick={toggleWish} aria-label="Save to wishlist" className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-blush-300/60 bg-white/60 text-ink-soft transition-colors hover:text-blush-600">
               <FiHeart className={has(p.id) ? "fill-blush-500 text-blush-500" : ""} size={20} />
             </button>
           </motion.div>
@@ -187,7 +194,7 @@ export default function Product() {
       {related.length > 0 && (
         <section className="mt-28">
           <h2 className="heading-display mb-10 text-center text-[clamp(1.8rem,4vw,2.6rem)]">You May Also Love</h2>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-8 lg:grid-cols-4">
             {related.map((rp) => (
               <ProductCard key={rp.id} product={rp} />
             ))}

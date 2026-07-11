@@ -51,6 +51,11 @@ const statusColors = {
   accepted: "bg-emerald-500/15 text-emerald-300",
   declined: "bg-red-500/15 text-red-300",
   completed: "bg-emerald-500/15 text-emerald-300",
+  approved: "bg-emerald-500/15 text-emerald-300",
+  unpaid: "bg-white/10 text-blush-100",
+  verifying: "bg-amber-500/15 text-amber-300",
+  paid: "bg-emerald-500/15 text-emerald-300",
+  failed: "bg-red-500/15 text-red-300",
 };
 
 export function StatusPill({ status }) {

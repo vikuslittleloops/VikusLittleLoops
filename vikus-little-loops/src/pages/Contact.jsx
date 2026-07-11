@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FaInstagram, FaWhatsapp, FaEnvelope } from "react-icons/fa";
 import Button from "@/components/ui/Button";
+import Seo from "@/components/Seo";
 import { fadeUp, stagger, reveal } from "@/lib/motion";
 
 const schema = z.object({
@@ -23,7 +24,8 @@ export default function Contact() {
     useForm({ resolver: zodResolver(schema) });
 
   return (
-    <main className="container-lux pb-28 pt-36">
+    <main className="container-lux pb-16 pt-28 sm:pb-28 sm:pt-36">
+      <Seo title="Contact" description="Questions, custom ideas, or just want to say hi? Reach Viku's Little Loops via Instagram, WhatsApp, or email." />
       <header className="text-center">
         <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">Say Hello</span>
         <h1 className="heading-display mt-3 text-[clamp(2.4rem,5.5vw,4rem)]">Let's Chat</h1>

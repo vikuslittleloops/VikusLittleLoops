@@ -6,10 +6,14 @@ import { z } from "zod";
 import { motion } from "framer-motion";
 import { FiCheckCircle } from "react-icons/fi";
 import Button from "@/components/ui/Button";
+import { FiCopy } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
 import { useCustomerAuth } from "@/context/CustomerAuthContext";
+import { useToast } from "@/context/ToastContext";
 import { inr } from "@/lib/format";
 import { customerApi } from "@/lib/api";
+import { UPI_ID, upiLink } from "@/lib/shopConfig";
+import UpiQR from "@/components/UpiQR";
 
 const schema = z.object({
   name: z.string().min(2, "Please enter your name"),
@@ -26,9 +30,13 @@ const schema = z.object({
 export default function Checkout() {
   const { items, subtotal, clear } = useCart();
   const { customer, loading: authLoading } = useCustomerAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [placed, setPlaced] = useState(null);
   const [error, setError] = useState("");
+  const [payRef, setPayRef] = useState("");
+  const [refSubmitted, setRefSubmitted] = useState(false);
+  const [refBusy, setRefBusy] = useState(false);
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(schema),
@@ -40,18 +48,97 @@ export default function Checkout() {
   });
 
   if (placed) {
+    const copyUpi = async () => {
+      try {
+        await navigator.clipboard.writeText(UPI_ID);
+        toast("UPI ID copied 🌸");
+      } catch {
+        toast("Couldn't copy — please copy manually", "info");
+      }
+    };
+
+    const submitRef = async () => {
+      if (payRef.trim().length < 4) return;
+      setRefBusy(true);
+      try {
+        await customerApi.post(`/orders/${placed.order_number}/payment`, { reference: payRef.trim() });
+        setRefSubmitted(true);
+        toast("Payment details received — we'll verify & confirm 🌸");
+      } catch {
+        toast("Couldn't submit, please try again", "info");
+      } finally {
+        setRefBusy(false);
+      }
+    };
+
     return (
-      <main className="container-lux grid min-h-[70vh] place-items-center pt-36 text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <main className="container-lux grid min-h-[70vh] place-items-center pt-36 pb-16 text-center">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
           <FiCheckCircle className="mx-auto text-olive" size={64} />
-          <h1 className="heading-display mt-5 text-4xl">Thank you! 🌷</h1>
+          <h1 className="heading-display mt-5 text-4xl">Order placed! 🌷</h1>
           <p className="mt-3 font-serif text-xl text-ink-soft">
-            Your order <b className="text-blush-700">{placed.order_number}</b> is placed.
+            Order <b className="text-blush-700">{placed.order_number}</b> — pending payment.
           </p>
-          <p className="mt-1 font-serif text-lg text-ink-soft">
-            We'll begin stitching it with love and reach out shortly.
-          </p>
-          <div className="mt-7"><Button to="/shop">Continue Shopping</Button></div>
+
+          {refSubmitted ? (
+            <div className="mt-7 rounded-xl3 border border-blush-200/50 bg-ivory/80 p-8 text-center shadow-soft">
+              <p className="text-5xl">💗</p>
+              <h2 className="heading-display mt-3 text-2xl">Payment under verification</h2>
+              <p className="mt-2 font-serif text-base text-ink-soft">
+                Thank you! We'll verify your payment and confirm your order shortly.
+                You can track it in your account.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-7 rounded-xl3 border border-blush-200/50 bg-ivory/80 p-7 text-left shadow-soft">
+              <p className="text-center font-display text-lg">Pay via UPI to confirm</p>
+              <p className="mt-1 text-center font-serif text-base text-ink-soft">
+                Step 1 — scan the QR (or use the UPI ID) to pay <b className="text-ink">{inr(placed.total)}</b>.
+              </p>
+
+              <div className="mt-5">
+                <UpiQR amount={placed.total} note={placed.order_number} />
+              </div>
+
+              <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-blush-200/60 bg-white/70 px-4 py-3">
+                <div>
+                  <p className="text-[0.66rem] uppercase tracking-wide text-warmgray">UPI ID</p>
+                  <p className="font-medium">{UPI_ID}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={copyUpi} className="flex items-center gap-1.5 rounded-full border border-blush-300/60 px-3 py-2 text-xs text-ink-soft hover:text-blush-600">
+                    <FiCopy size={14} /> Copy
+                  </button>
+                  <a href={upiLink({ amount: placed.total, note: placed.order_number })} className="rounded-full border border-blush-300/60 px-3 py-2 text-xs text-ink-soft hover:text-blush-600">
+                    Open UPI app
+                  </a>
+                </div>
+              </div>
+
+              {/* Step 2 — submit reference */}
+              <p className="mt-6 text-center font-serif text-base text-ink-soft">
+                Step 2 — after paying, enter your <b className="text-ink">UPI reference / UTR number</b> so we can verify it.
+              </p>
+              <input
+                value={payRef}
+                onChange={(e) => setPayRef(e.target.value)}
+                placeholder="e.g. 12-digit UTR number"
+                className="mt-3 w-full rounded-2xl border border-blush-300/50 bg-white/80 px-5 py-3.5 text-sm outline-none transition-shadow focus:border-blush-500 focus:shadow-glow"
+              />
+              <button
+                onClick={submitRef}
+                disabled={refBusy || payRef.trim().length < 4}
+                className="mt-3 w-full rounded-full bg-gradient-to-br from-blush-400 to-blush-600 py-3.5 text-sm uppercase tracking-[0.12em] text-white transition hover:shadow-lift disabled:opacity-50"
+              >
+                {refBusy ? "Submitting…" : "I've Paid — Submit for Verification"}
+              </button>
+              <p className="mt-3 text-center text-xs text-warmgray">
+                Your order is confirmed once we verify the payment. You can also submit this later from your account.
+              </p>
+            </div>
+          )}
+
+          <div className="mt-7"><Button to="/account">View My Orders</Button></div>
         </motion.div>
       </main>
     );
@@ -125,9 +212,9 @@ export default function Checkout() {
   const field = "w-full rounded-2xl border border-blush-300/50 bg-white/80 px-5 py-3.5 text-sm outline-none transition-shadow focus:border-blush-500 focus:shadow-glow";
 
   return (
-    <main className="container-lux pb-28 pt-36">
-      <h1 className="heading-display mb-10 text-[clamp(2.2rem,5vw,3.2rem)]">Checkout</h1>
-      <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr]">
+    <main className="container-lux pb-16 pt-28 sm:pb-28 sm:pt-36">
+      <h1 className="heading-display mb-8 text-[clamp(2rem,5vw,3.2rem)] sm:mb-10">Checkout</h1>
+      <div className="flex flex-col-reverse gap-8 lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-12">
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
           <h3 className="font-display text-xl">Shipping details</h3>
@@ -151,7 +238,8 @@ export default function Checkout() {
             {isSubmitting ? "Placing order…" : "Place Order"}
           </Button>
           <p className="text-xs text-ink-soft">
-            This is a cash/UPI-on-confirmation flow — we'll message you to arrange payment.
+            Pay securely via <b>Razorpay</b> (cards, UPI, netbanking &amp; wallets) — or UPI — with a
+            pay button shown right after you place your order. Confirmed once payment is received.
           </p>
         </form>
 
@@ -175,6 +263,7 @@ export default function Checkout() {
           <div className="mt-5 space-y-2 border-t border-blush-200/50 pt-5 text-ink-soft">
             <div className="flex justify-between"><span>Subtotal</span><span className="text-ink">{inr(subtotal)}</span></div>
             <div className="flex justify-between"><span>Shipping</span><span className="text-olive-deep">Free</span></div>
+            <div className="flex justify-between"><span>Payment</span><span className="text-ink">Razorpay / UPI</span></div>
           </div>
           <div className="mt-4 flex justify-between border-t border-blush-200/50 pt-4 font-serif text-2xl font-semibold">
             <span>Total</span><span>{inr(subtotal)}</span>

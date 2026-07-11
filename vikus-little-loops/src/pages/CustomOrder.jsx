@@ -26,7 +26,7 @@ export default function CustomOrder() {
     useForm({ resolver: zodResolver(schema) });
 
   return (
-    <main className="container-lux pb-28 pt-36">
+    <main className="container-lux pb-16 pt-28 sm:pb-28 sm:pt-36">
       <header className="mx-auto max-w-2xl text-center">
         <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">Made Just For You</span>
         <h1 className="heading-display mt-3 text-[clamp(2.4rem,5.5vw,4rem)]">Custom Order</h1>
@@ -70,7 +70,7 @@ export default function CustomOrder() {
           <textarea rows={5} {...register("details")} className={inp} placeholder="Colours, vibe, who it's for, any reference…" />
         </Field>
 
-        <div className="mt-8 flex items-center gap-4">
+        <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
           <Button type="submit" size="lg">Send Request</Button>
           <span className="font-serif text-base text-ink-soft">We reply within 24 hours 🌸</span>
         </div>

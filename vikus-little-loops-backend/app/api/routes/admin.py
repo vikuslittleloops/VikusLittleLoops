@@ -10,7 +10,7 @@ from app.models.admin import Admin
 from app.models.catalog import Category, Product
 from app.models.commerce import CustomOrder, Customer, Order, OrderItem
 from app.models.content import Review
-from app.schemas.admin import CustomerOut, OrderOut, StatusUpdate
+from app.schemas.admin import CustomerOut, OrderOut, PaymentUpdate, StatusUpdate
 from app.schemas.catalog import ProductListOut
 from app.schemas.misc import ReviewOut
 
@@ -109,6 +109,23 @@ def update_order_status(
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     order.status = payload.status
+    db.commit()
+    order = db.scalar(select(Order).options(selectinload(Order.items)).where(Order.id == order_id))
+    return order
+
+
+@router.patch("/orders/{order_id}/payment", response_model=OrderOut)
+def update_order_payment(
+    order_id: int, payload: PaymentUpdate,
+    db: Session = Depends(get_db), _: Admin = Depends(get_current_admin),
+):
+    order = db.get(Order, order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    order.payment_status = payload.payment_status
+    # Confirm the order automatically once payment is verified.
+    if payload.payment_status == "paid" and order.status == "pending":
+        order.status = "confirmed"
     db.commit()
     order = db.scalar(select(Order).options(selectinload(Order.items)).where(Order.id == order_id))
     return order

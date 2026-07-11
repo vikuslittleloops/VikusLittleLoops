@@ -16,7 +16,9 @@ export default function Testimonials() {
           <motion.div
             key={t.id}
             variants={fadeUp}
-            className="rounded-xl2 border border-blush-200/50 bg-ivory/80 p-8 shadow-soft"
+            whileHover={{ y: -8 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="rounded-xl2 border border-blush-200/50 bg-ivory/80 p-8 shadow-soft transition-shadow duration-500 hover:shadow-lift"
           >
             <span className="font-display text-5xl leading-[0.2] text-blush-400 opacity-50">
               &ldquo;

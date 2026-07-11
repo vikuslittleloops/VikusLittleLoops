@@ -35,15 +35,16 @@ export default function Navbar() {
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         solid
           ? "bg-cream/80 py-3 shadow-[0_1px_0_rgba(242,176,191,0.3)] backdrop-blur-xl"
-          : "py-6"
+          : "py-4 lg:py-6"
       }`}
+      style={{ paddingTop: solid ? undefined : "max(env(safe-area-inset-top, 0px), 1rem)" }}
     >
       <div className="container-lux flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3">
-          <span className="grid h-10 w-10 animate-spin-slow place-items-center rounded-full bg-[conic-gradient(from_210deg,#DC6B86,#F8CDD6,#FBE0CF,#94A06F,#DC6B86)] text-white shadow-soft">
+        <Link to="/" className="flex items-center gap-2.5 lg:gap-3">
+          <span className="grid h-9 w-9 lg:h-10 lg:w-10 animate-spin-slow place-items-center rounded-full bg-[conic-gradient(from_210deg,#DC6B86,#F8CDD6,#FBE0CF,#94A06F,#DC6B86)] text-white shadow-soft">
             ✿
           </span>
-          <span className="font-display text-xl font-semibold">
+          <span className="font-display text-base lg:text-xl font-semibold leading-tight">
             Viku's Little Loops
           </span>
         </Link>
@@ -63,22 +64,22 @@ export default function Navbar() {
         </div>
 
         {/* Icons */}
-        <div className="flex items-center gap-4">
-          <Link to={isAuthed ? "/account" : "/login"} aria-label="Account" className="text-ink-soft transition-colors hover:text-blush-600">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link to={isAuthed ? "/account" : "/login"} aria-label="Account" className="flex h-11 w-11 items-center justify-center text-ink-soft transition-colors hover:text-blush-600">
             <FiUser size={20} />
           </Link>
-          <Link to="/wishlist" aria-label="Wishlist" className="relative hidden text-ink-soft transition-colors hover:text-blush-600 sm:block">
+          <Link to="/wishlist" aria-label="Wishlist" className="relative hidden h-11 w-11 items-center justify-center text-ink-soft transition-colors hover:text-blush-600 sm:flex">
             <FiHeart size={20} />
             {wishCount > 0 && (
-              <span className="absolute -right-2 -top-2 grid h-4 w-4 place-items-center rounded-full bg-blush-500 text-[0.6rem] text-white">
+              <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full bg-blush-500 text-[0.6rem] text-white">
                 {wishCount}
               </span>
             )}
           </Link>
-          <button onClick={() => setCartOpen(true)} aria-label="Cart" className="relative text-ink-soft transition-colors hover:text-blush-600">
+          <button onClick={() => setCartOpen(true)} aria-label="Cart" className="relative flex h-11 w-11 items-center justify-center text-ink-soft transition-colors hover:text-blush-600">
             <FiShoppingBag size={20} />
             {count > 0 && (
-              <span className="absolute -right-2 -top-2 grid h-4 w-4 place-items-center rounded-full bg-blush-500 text-[0.6rem] text-white">
+              <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full bg-blush-500 text-[0.6rem] text-white">
                 {count}
               </span>
             )}
@@ -86,7 +87,7 @@ export default function Navbar() {
           <button
             onClick={() => setOpen(true)}
             aria-label="Menu"
-            className="text-ink lg:hidden"
+            className="flex h-11 w-11 items-center justify-center text-ink lg:hidden"
           >
             <FiMenu size={22} />
           </button>
@@ -96,37 +97,67 @@ export default function Navbar() {
       {/* Mobile drawer */}
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-cream lg:hidden"
-          >
-            <div className="container-lux flex items-center justify-between py-6">
-              <span className="font-display text-xl font-semibold">Menu</span>
-              <button onClick={() => setOpen(false)} aria-label="Close">
-                <FiX size={24} />
-              </button>
-            </div>
-            <div className="container-lux flex flex-col gap-6 pt-8">
-              {links.map((l, i) => (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 z-[59] bg-ink/20 backdrop-blur-sm lg:hidden"
+            />
+            {/* Drawer panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-y-0 right-0 z-[60] w-[min(320px,90vw)] bg-cream shadow-lift lg:hidden"
+            >
+              <div className="flex items-center justify-between border-b border-blush-200/50 px-6 py-5">
+                <span className="font-display text-xl font-semibold">Menu</span>
+                <button
+                  onClick={() => setOpen(false)}
+                  aria-label="Close menu"
+                  className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-blush-50"
+                >
+                  <FiX size={22} />
+                </button>
+              </div>
+              <nav className="flex flex-col px-6 py-8">
+                {links.map((l, i) => (
+                  <motion.div
+                    key={l.label}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * i, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <Link
+                      to={l.to}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 border-b border-blush-100 py-4 font-display text-2xl transition-colors hover:text-blush-600"
+                    >
+                      {l.label}
+                    </Link>
+                  </motion.div>
+                ))}
+                {/* Wishlist link in mobile menu */}
                 <motion.div
-                  key={l.label}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.08 * i }}
+                  transition={{ delay: 0.05 * links.length, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Link
-                    to={l.to}
+                    to="/wishlist"
                     onClick={() => setOpen(false)}
-                    className="font-display text-3xl"
+                    className="flex items-center gap-3 border-b border-blush-100 py-4 font-display text-2xl transition-colors hover:text-blush-600"
                   >
-                    {l.label}
+                    Wishlist {wishCount > 0 && <span className="ml-1 rounded-full bg-blush-500 px-2 py-0.5 text-sm text-white">{wishCount}</span>}
                   </Link>
                 </motion.div>
-              ))}
-            </div>
-          </motion.div>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </motion.nav>

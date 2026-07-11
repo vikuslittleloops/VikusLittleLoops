@@ -22,6 +22,11 @@ export const createCollection = (payload) => api.post("/collections", payload).t
 // ---- Coupons ----
 export const createCoupon = (payload) => api.post("/coupons", payload).then((r) => r.data);
 
+// ---- Homepage ----
+export const getHomepageSections = () => api.get("/admin/homepage").then((r) => r.data);
+export const updateHomepageSection = (key, payload) =>
+  api.put(`/admin/homepage/${key}`, payload).then((r) => r.data);
+
 // ---- Reviews ----
 export const getReviews = () => api.get("/admin/reviews").then((r) => r.data);
 export const approveReview = (id) => api.patch(`/admin/reviews/${id}/approve`).then((r) => r.data);
@@ -39,6 +44,8 @@ export const getCustomers = () => api.get("/admin/customers").then((r) => r.data
 export const getOrders = () => api.get("/admin/orders").then((r) => r.data);
 export const setOrderStatus = (id, status) =>
   api.patch(`/admin/orders/${id}/status`, { status }).then((r) => r.data);
+export const setOrderPayment = (id, payment_status) =>
+  api.patch(`/admin/orders/${id}/payment`, { payment_status }).then((r) => r.data);
 
 // ---- Uploads (Cloudinary via backend) ----
 export const uploadImage = (file) => {

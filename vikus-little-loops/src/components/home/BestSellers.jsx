@@ -19,9 +19,9 @@ export default function BestSellers() {
       />
 
       {isLoading ? (
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-8 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-[420px] animate-pulse rounded-xl2 bg-blush-100/60" />
+            <div key={i} className="h-[260px] animate-pulse rounded-xl2 bg-blush-100/60 sm:h-[420px]" />
           ))}
         </div>
       ) : !products.length ? (
@@ -29,7 +29,7 @@ export default function BestSellers() {
           New pieces are on their way. 🧶
         </p>
       ) : (
-        <motion.div variants={stagger} {...reveal} className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <motion.div variants={stagger} {...reveal} className="grid grid-cols-2 gap-3 sm:gap-8 lg:grid-cols-4">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

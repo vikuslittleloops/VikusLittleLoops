@@ -25,9 +25,9 @@ export default function Wishlist() {
     );
 
   return (
-    <main className="container-lux pb-28 pt-36">
-      <h1 className="heading-display mb-10 text-[clamp(2.2rem,5vw,3.2rem)]">Your Wishlist</h1>
-      <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+    <main className="container-lux pb-16 pt-28 sm:pb-28 sm:pt-36">
+      <h1 className="heading-display mb-8 text-[clamp(2rem,5vw,3.2rem)] sm:mb-10">Your Wishlist</h1>
+      <div className="grid grid-cols-2 gap-3 sm:gap-7 lg:grid-cols-4">
         {items.map((i) => (
           <motion.div
             key={i.product_id}
@@ -42,18 +42,20 @@ export default function Wishlist() {
               <FiX size={16} />
             </button>
             <Link to={`/product/${i.slug}`} className="block">
-              <div className="grid h-56 place-items-center overflow-hidden bg-blush-100">
-                {i.image ? <img src={i.image} alt={i.name} className="h-full w-full object-cover" /> : <span className="text-6xl">{i.emoji}</span>}
+              <div className="grid h-44 place-items-center overflow-hidden bg-blush-100 sm:h-56">
+                {i.image ? <img src={i.image} alt={i.name} className="h-full w-full object-cover" /> : <span className="text-4xl sm:text-6xl">{i.emoji}</span>}
               </div>
             </Link>
-            <div className="p-5">
-              <h3 className="font-display text-lg"><Link to={`/product/${i.slug}`}>{i.name}</Link></h3>
-              <p className="mt-1 font-serif text-xl font-semibold">{inr(i.price)}</p>
+            <div className="p-3 sm:p-5">
+              <h3 className="font-display text-[0.85rem] leading-snug sm:text-lg"><Link to={`/product/${i.slug}`}>{i.name}</Link></h3>
+              <p className="mt-1 font-serif text-base font-semibold sm:text-xl">{inr(i.price)}</p>
               <button
                 onClick={() => { add({ ...i, stock: i.stock ?? 10 }); toast(`${i.name} added to cart`); }}
-                className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-br from-blush-400 to-blush-600 py-2.5 text-[0.74rem] uppercase tracking-[0.12em] text-white transition hover:shadow-lift"
+                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-full bg-gradient-to-br from-blush-400 to-blush-600 py-2 text-[0.68rem] uppercase tracking-[0.1em] text-white transition hover:shadow-lift sm:mt-3 sm:gap-2 sm:py-2.5 sm:text-[0.74rem] sm:tracking-[0.12em]"
               >
-                <FiShoppingBag size={14} /> Add to Cart
+                <FiShoppingBag size={13} />
+                <span className="sm:hidden">Add</span>
+                <span className="hidden sm:inline">Add to Cart</span>
               </button>
             </div>
           </motion.div>

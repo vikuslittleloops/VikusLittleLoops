@@ -5,10 +5,15 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%; /* Prevent iOS font size inflation */
   }
   body {
     @apply bg-cream text-ink font-sans antialiased;
     overflow-x: hidden;
+  }
+  /* Ensure inputs/buttons are never smaller than 44px tall on mobile */
+  button, [role="button"], a {
+    -webkit-tap-highlight-color: transparent;
   }
   ::selection {
     @apply bg-blush-500 text-white;
@@ -29,7 +34,7 @@
 
 @layer components {
   .container-lux {
-    @apply mx-auto w-full max-w-[1200px] px-6 md:px-8;
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 md:px-8;
   }
   .heading-display {
     @apply font-display font-semibold tracking-tight text-ink;
