@@ -1,13 +1,21 @@
 import { Link } from "react-router-dom";
 import { FaInstagram, FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import { useCategories, useHomepage } from "@/lib/hooks";
 
-const cols = [
-  { title: "Shop", links: [["Tulips", "/shop"], ["Sakura", "/shop"], ["Bag Charms", "/shop"], ["Gift Sets", "/shop"]] },
-  { title: "Help", links: [["Shipping", "/contact"], ["Returns", "/contact"], ["FAQ", "/contact"], ["Custom Orders", "/custom-order"]] },
-  { title: "Brand", links: [["Our Story", "/about"], ["The Maker", "/about"], ["Contact", "/contact"]] },
-];
+const helpCol = { title: "Help", links: [["Shipping", "/contact"], ["Returns", "/contact"], ["FAQ", "/contact"], ["Custom Orders", "/custom-order"]] };
+const brandCol = { title: "Brand", links: [["The Maker", "/about"], ["Contact", "/contact"]] };
 
 export default function Footer() {
+  const { data: hp } = useHomepage();
+  const { data: categories } = useCategories();
+  const logoUrl = hp?.branding?.content?.logo_url;
+
+  const shopLinks = categories?.length
+    ? categories.slice(0, 5).map((c) => [c.name, `/shop?category=${c.id}`])
+    : [["All Creations", "/shop"]];
+
+  const cols = [{ title: "Shop", links: shopLinks }, helpCol, brandCol];
+
   return (
     <footer className="relative mt-16 border-t border-blush-200/50 pb-12 pt-12 sm:pt-20">
       <div className="container-lux">
@@ -25,9 +33,13 @@ export default function Footer() {
         <div className="mt-10 grid grid-cols-2 gap-8 sm:mt-16 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <div className="flex items-center gap-3">
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-blush-400 to-blush-600 text-white">
-                ✿
-              </span>
+              {logoUrl ? (
+                <img src={logoUrl} alt="Viku's Little Loops" className="h-9 w-9 rounded-full object-cover shadow-soft" />
+              ) : (
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-blush-400 to-blush-600 text-white">
+                  ✿
+                </span>
+              )}
               <span className="font-display text-lg font-semibold">
                 Viku's Little Loops
               </span>

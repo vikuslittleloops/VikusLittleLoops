@@ -9,17 +9,25 @@ import { api } from "@/lib/api";
 const schema = z.object({
   name: z.string().min(2, "Please enter your name"),
   email: z.string().email("Valid email please"),
-  color: z.string().min(1, "Pick a colour"),
+  color: z.string().min(1, "Tell us your preferred colour"),
   size: z.string().min(1, "Pick a size"),
-  yarn: z.string().min(1, "Choose a yarn"),
+  yarn: z.string().optional(),
   budget: z.string().optional(),
   date: z.string().optional(),
   details: z.string().min(10, "Describe your dream piece"),
 });
 
-const colors = ["Blush Pink", "Lavender", "Peach", "Olive", "Ivory", "Mix"];
 const sizes = ["Small", "Medium", "Large", "Custom"];
-const yarns = ["Soft Cotton", "Velvet", "Chunky Wool", "Metallic Accent"];
+const yarns = [
+  "Acrylic Yarn",
+  "Cotton Yarn",
+  "Milk Cotton Yarn",
+  "Mercerised Cotton Yarn",
+  "Wool",
+  "Chenille",
+  "Fur Yarn",
+  "Mohair",
+];
 
 export default function CustomOrder() {
   const { register, handleSubmit, reset, formState: { errors, isSubmitSuccessful } } =
@@ -51,13 +59,13 @@ export default function CustomOrder() {
           <Field label="Your name" error={errors.name}><input {...register("name")} className={inp} /></Field>
           <Field label="Email" error={errors.email}><input type="email" {...register("email")} className={inp} /></Field>
           <Field label="Preferred colour" error={errors.color}>
-            <select {...register("color")} className={inp}><option value="">Select…</option>{colors.map((c) => <option key={c}>{c}</option>)}</select>
+            <input {...register("color")} className={inp} placeholder="e.g. Blush pink with ivory accents" />
           </Field>
           <Field label="Size" error={errors.size}>
             <select {...register("size")} className={inp}><option value="">Select…</option>{sizes.map((c) => <option key={c}>{c}</option>)}</select>
           </Field>
-          <Field label="Yarn type" error={errors.yarn}>
-            <select {...register("yarn")} className={inp}><option value="">Select…</option>{yarns.map((c) => <option key={c}>{c}</option>)}</select>
+          <Field label="Yarn type (optional)" error={errors.yarn}>
+            <select {...register("yarn")} className={inp}><option value="">No preference</option>{yarns.map((c) => <option key={c}>{c}</option>)}</select>
           </Field>
           <Field label="Budget (₹, optional)"><input {...register("budget")} className={inp} placeholder="e.g. 1500" /></Field>
           <Field label="Needed by (optional)"><input type="date" {...register("date")} className={inp} /></Field>

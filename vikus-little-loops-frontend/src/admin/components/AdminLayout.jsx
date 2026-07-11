@@ -5,6 +5,7 @@ import {
   FiUsers, FiStar, FiHome, FiLogOut, FiMenu, FiX, FiExternalLink, FiImage,
 } from "react-icons/fi";
 import { useAuth } from "@/admin/context/AuthContext";
+import { useHomepage } from "@/lib/hooks";
 
 const nav = [
   { to: "/admin", label: "Dashboard", icon: FiGrid, end: true },
@@ -24,13 +25,19 @@ export default function AdminLayout({ children }) {
   const { admin, logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const { data: hp } = useHomepage();
+  const logoUrl = hp?.branding?.content?.logo_url;
 
   const SidebarBody = (
     <>
       <div className="flex items-center gap-3 px-6 py-6">
-        <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-blush-400 to-blush-600 text-white">
-          ✿
-        </span>
+        {logoUrl ? (
+          <img src={logoUrl} alt="" className="h-10 w-10 rounded-full object-cover" />
+        ) : (
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-blush-400 to-blush-600 text-white">
+            ✿
+          </span>
+        )}
         <div>
           <p className="font-display text-lg font-semibold text-white">Little Loops</p>
           <p className="text-[0.68rem] uppercase tracking-[0.2em] text-blush-300/70">Admin</p>

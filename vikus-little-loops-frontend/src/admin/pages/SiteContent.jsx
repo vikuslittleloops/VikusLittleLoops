@@ -77,7 +77,7 @@ export default function SiteContent() {
   const [gallery, setGallery] = useState([]);
   const [why, setWhy] = useState(DEFAULT_WHY);
   const [about, setAbout] = useState({
-    journey_heading: "", creator_kicker: "", creator_heading: "", creator_body: "", creator_signature: "",
+    creator_kicker: "", creator_heading: "", creator_body: "", creator_signature: "",
   });
   const [faqDrafts, setFaqDrafts] = useState([]);
   const [newFaq, setNewFaq] = useState({ question: "", answer: "" });
@@ -92,7 +92,7 @@ export default function SiteContent() {
     if (w?.length) setWhy(DEFAULT_WHY.map((d, i) => ({ ...d, ...(w[i] || {}) })));
     const a = byKey("about_texts")?.content;
     if (a) setAbout({
-      journey_heading: a.journey_heading || "", creator_kicker: a.creator_kicker || "",
+      creator_kicker: a.creator_kicker || "",
       creator_heading: a.creator_heading || "", creator_body: a.creator_body || "",
       creator_signature: a.creator_signature || "",
     });
@@ -201,7 +201,6 @@ export default function SiteContent() {
         <h3 className="mb-1 font-display text-lg text-white">About Page Texts</h3>
         <p className="mb-4 text-sm text-blush-200/50">Leave a field empty to keep the current website text.</p>
         <div className="grid gap-4 lg:grid-cols-2">
-          <div><label className={lbl}>Journey section heading (currently "Loop by Loop")</label><input className={inp} value={about.journey_heading} onChange={(e) => setAbout({ ...about, journey_heading: e.target.value })} placeholder="Loop by Loop" /></div>
           <div><label className={lbl}>Creator section kicker (currently "Meet the Creator")</label><input className={inp} value={about.creator_kicker} onChange={(e) => setAbout({ ...about, creator_kicker: e.target.value })} placeholder="Meet the Creator" /></div>
           <div><label className={lbl}>Creator heading</label><input className={inp} value={about.creator_heading} onChange={(e) => setAbout({ ...about, creator_heading: e.target.value })} placeholder="Hello, lovely soul ✨" /></div>
           <div><label className={lbl}>Signature</label><input className={inp} value={about.creator_signature} onChange={(e) => setAbout({ ...about, creator_signature: e.target.value })} placeholder="With love and gratitude, Varnika Agarwal 💗" /></div>

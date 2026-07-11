@@ -8,14 +8,8 @@ import { useHomepage } from "@/lib/hooks";
 /* Fallback if no photos uploaded in admin yet: drop files in /public/creator/. */
 const FALLBACK_PHOTOS = ["/creator/varnika-1.jpg", "/creator/varnika-2.jpg"];
 
-const timeline = [
-  { year: "2021", title: "The First Loop", text: "A quiet evening, a hook, and one ball of cotton — the very first little flower was born." },
-  { year: "2023", title: "Sharing the Joy", text: "Friends asked for their own. The Instagram page bloomed, and so did the little loops." },
-  { year: "2025", title: "A Tiny Atelier", text: "Hundreds of handmade pieces later, every order is still stitched slowly, with the same love." },
-];
-
 const process = [
-  { icon: "🧶", title: "Choose the Yarn", text: "Soft, natural cotton in dreamy pastel tones." },
+  { icon: "🧶", title: "Choose the Yarn", text: "The required type and color of yarn." },
   { icon: "🪡", title: "Hand Crochet", text: "Every stitch made slowly, by hand — never rushed." },
   { icon: "🌸", title: "Finishing Touches", text: "Shaped, blocked, and detailed with quiet care." },
   { icon: "🎁", title: "Lovingly Packaged", text: "Wrapped for a warm, joyful unboxing." },
@@ -49,7 +43,6 @@ export default function About() {
 
   // Admin-editable texts (Admin → Site Content → About Page Texts)
   const texts = hp?.about_texts?.content || {};
-  const journeyHeading = texts.journey_heading || "Loop by Loop";
   const creatorKicker = texts.creator_kicker || "Meet the Creator";
   const creatorHeading = texts.creator_heading || "Hello, lovely soul ✨";
   const creatorSignature = texts.creator_signature || "With love and gratitude,\nVarnika Agarwal 💗";
@@ -79,7 +72,7 @@ export default function About() {
 
         <motion.div initial="hidden" animate="show" variants={stagger} className="relative">
           <motion.span variants={fadeUp} className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-blush-300/50 bg-white/60 px-5 py-2 text-[0.72rem] uppercase tracking-[0.25em] text-blush-700">
-            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-olive" /> Our Story
+            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-olive" /> Meet the Creator
           </motion.span>
           <motion.h1 variants={fadeUp} className="heading-display text-balance text-[clamp(2.8rem,7vw,5.4rem)] font-bold leading-[1.04]">
             A Little Loop
@@ -140,28 +133,6 @@ export default function About() {
               </motion.div>
             ))}
           </motion.div>
-        </section>
-
-        {/* ===== TIMELINE ===== */}
-        <section className="py-16">
-          <div className="text-center">
-            <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">Crafting Journey</span>
-            <h2 className="heading-display mt-3 text-[clamp(2rem,4.4vw,3rem)]">{journeyHeading}</h2>
-          </div>
-          <div className="relative mx-auto mt-14 max-w-2xl">
-            <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-blush-400 to-transparent md:block" />
-            <motion.div variants={stagger} {...reveal} className="space-y-10">
-              {timeline.map((t, i) => (
-                <motion.div key={t.year} variants={fadeUp} className={`relative md:w-1/2 ${i % 2 ? "md:ml-auto md:pl-10" : "md:pr-10 md:text-right"}`}>
-                  <div className="rounded-xl2 border border-blush-200/50 bg-ivory/80 p-6 shadow-soft sm:p-7">
-                    <div className="font-display text-2xl font-semibold text-blush-600">{t.year}</div>
-                    <h4 className="mt-1 font-display text-lg">{t.title}</h4>
-                    <p className="mt-2 font-serif text-base text-ink-soft">{t.text}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
         </section>
 
         {/* ===== PULL QUOTE ===== */}

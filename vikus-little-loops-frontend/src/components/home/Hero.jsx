@@ -114,12 +114,12 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: easeLux, delay: 1.0 }}
-            className="mx-auto mt-8 max-w-2xl sm:mt-10"
+            className="mx-auto mt-8 w-full max-w-[280px] sm:mt-10 sm:max-w-[320px]"
           >
             <Slideshow
               photos={slides}
               interval={1000}
-              className="aspect-[16/9] w-full rounded-xl3 border border-blush-200/60 shadow-lift"
+              className="aspect-[4/5] w-full rounded-xl3 border border-blush-200/60 shadow-lift"
             />
           </motion.div>
         )}
@@ -135,12 +135,12 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — static so it never overlaps the hero content */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[0.66rem] uppercase tracking-[0.25em] text-warmgray"
+        className="mt-10 flex flex-col items-center gap-2 text-[0.66rem] uppercase tracking-[0.25em] text-warmgray"
       >
         <span className="flex h-9 w-6 justify-center rounded-full border border-warmgray/50 pt-2">
           <motion.span

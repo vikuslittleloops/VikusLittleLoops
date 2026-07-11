@@ -5,7 +5,7 @@ import { testimonials as fallback } from "@/data/products";
 import { useFeaturedReviews } from "@/lib/hooks";
 
 export default function Testimonials() {
-  const { data: reviews } = useFeaturedReviews(6);
+  const { data: reviews } = useFeaturedReviews(4);
 
   // Admin/customer reviews from the API when available, else the built-in ones.
   const items = reviews?.length
@@ -25,7 +25,7 @@ export default function Testimonials() {
       <motion.div
         variants={stagger}
         {...reveal}
-        className="grid gap-7 md:grid-cols-3"
+        className={`grid gap-7 md:grid-cols-2 ${items.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}
       >
         {items.map((t) => (
           <motion.div

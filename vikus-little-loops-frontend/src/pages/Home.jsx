@@ -30,11 +30,11 @@ export default function Home() {
 
       {/* Marquee strip */}
       <div className="overflow-hidden whitespace-nowrap bg-ink py-4 text-cream">
-        <div className="inline-flex animate-[scrollx_28s_linear_infinite] gap-12 font-serif text-xl tracking-wide">
+        <div className="flex w-max animate-[scrollx_28s_linear_infinite] font-serif text-xl tracking-wide will-change-transform">
           {[0, 1].map((k) => (
-            <span key={k} className="inline-flex items-center gap-12">
+            <span key={k} className="flex items-center" aria-hidden={k === 1}>
               {items.map((t, i) => (
-                <span key={i}>
+                <span key={i} className="px-6">
                   <b className="font-normal text-blush-300">✿</b> {t}
                 </span>
               ))}

@@ -6,7 +6,7 @@ import { useHomepage } from "@/lib/hooks";
 
 /**
  * Admin-uploaded photo section below the hero.
- * Big rotating frame (1s) + thumbnails of the other photos.
+ * Compact 4:5 rotating frame with a small thumbnail row.
  */
 export default function GalleryStrip() {
   const { data: hp } = useHomepage();
@@ -17,20 +17,22 @@ export default function GalleryStrip() {
   return (
     <section className="container-lux py-20">
       <SectionHeading kicker="Little Glimpses" title="Fresh from the Atelier" />
-      <motion.div variants={scaleIn} {...reveal} className="grid gap-4 md:grid-cols-[2fr_1fr]">
+      <motion.div variants={scaleIn} {...reveal} className="mx-auto max-w-[320px]">
         <Slideshow
           photos={photos}
           interval={1000}
-          className="aspect-[16/10] w-full rounded-xl3 shadow-lift md:aspect-auto md:min-h-[420px]"
+          className="aspect-[4/5] w-full rounded-xl3 border border-blush-200/60 shadow-lift"
         />
-        <div className="hidden grid-rows-3 gap-4 md:grid">
-          {photos.slice(0, 3).map((src, i) => (
-            <div key={i} className="overflow-hidden rounded-xl2 shadow-soft">
-              <img src={src} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+      </motion.div>
+      {photos.length > 1 && (
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          {photos.slice(0, 5).map((src, i) => (
+            <div key={i} className="h-20 w-20 overflow-hidden rounded-xl2 shadow-soft">
+              <img src={src} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 hover:scale-110" />
             </div>
           ))}
         </div>
-      </motion.div>
+      )}
     </section>
   );
 }
