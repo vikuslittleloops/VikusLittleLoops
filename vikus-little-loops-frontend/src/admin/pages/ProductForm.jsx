@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FiUploadCloud, FiX, FiStar } from "react-icons/fi";
 import {
   createProduct, updateProduct, getProduct,
@@ -30,6 +30,7 @@ export default function ProductForm() {
   const [saving, setSaving] = useState(false);
   const [editId, setEditId] = useState(null);
   const [error, setError] = useState("");
+  const qc = useQueryClient();
 
   const { data: categories } = useQuery({ queryKey: ["cats-all"], queryFn: getCategories });
   const { data: collections } = useQuery({ queryKey: ["cols-all"], queryFn: getCollections });
@@ -44,9 +45,18 @@ export default function ProductForm() {
       setEditId(existing.id);
       reset({
         ...existing,
+        // API returns Decimal as string — convert to number for the input.
+        price: Number(existing.price),
+        discount_percent: Number(existing.discount_percent) || 0,
+        stock: Number(existing.stock) || 0,
         tags: (existing.tags || []).join(", "),
-        category_id: existing.category_id || "",
-        collection_id: existing.collection_id || "",
+        category_id: existing.category_id ?? "",
+        collection_id: existing.collection_id ?? "",
+        is_published: existing.is_published ?? true,
+        is_featured: existing.is_featured ?? false,
+        is_trending: existing.is_trending ?? false,
+        is_best_seller: existing.is_best_seller ?? false,
+        is_new_arrival: existing.is_new_arrival ?? false,
       });
       setImages(existing.images || []);
     }
@@ -101,9 +111,13 @@ export default function ProductForm() {
         delete payload.variants;
         payload.images = cleanImages; // replaces the full image set
         await updateProduct(editId, payload);
+        // Invalidate so the storefront and admin list both pick up the new data.
+        qc.invalidateQueries({ queryKey: ["product", slug] });
+        qc.invalidateQueries({ queryKey: ["products"] });
       } else {
         payload.images = cleanImages;
         await createProduct(payload);
+        qc.invalidateQueries({ queryKey: ["products"] });
       }
       navigate("/admin/products");
     } catch (e) {

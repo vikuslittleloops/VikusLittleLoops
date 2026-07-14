@@ -74,7 +74,7 @@ export default function Reviews({ productId }) {
     <section className="mt-24">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="heading-display text-[clamp(1.8rem,4vw,2.4rem)]">Reviews</h2>
+          <h2 className="heading-display text-[clamp(1.8rem,4vw,2.4rem)] text-ink">Reviews</h2>
           {avg && (
             <p className="mt-1 text-ink-soft">
               <span className="text-blush-500">{"★".repeat(Math.round(avg))}</span> {avg} · {reviews.length} review{reviews.length > 1 ? "s" : ""}

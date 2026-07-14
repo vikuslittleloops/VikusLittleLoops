@@ -56,13 +56,13 @@ export default function ProductCard({ product }) {
       className="group relative overflow-hidden rounded-xl2 bg-ivory shadow-soft"
     >
       <Link to={`/product/${p.slug}`} className="block">
-        <div className={`relative h-[220px] overflow-hidden bg-gradient-to-br ${p.gradient} sm:h-[300px]`}>
+        <div className={`relative w-full overflow-hidden bg-gradient-to-br ${p.gradient}`} style={{ aspectRatio: "4/3" }}>
           {p.image ? (
             <img
               src={p.image}
               alt={p.name}
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-[1100ms] ease-lux group-hover:scale-110"
+              className="h-full w-full object-contain transition-transform duration-[1100ms] ease-lux group-hover:scale-110"
             />
           ) : (
             <div className="absolute inset-0 grid place-items-center text-[4.4rem] transition-transform duration-[1100ms] ease-lux group-hover:scale-110 group-hover:rotate-3">

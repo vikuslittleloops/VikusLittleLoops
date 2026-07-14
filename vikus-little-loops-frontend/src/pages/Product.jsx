@@ -93,12 +93,13 @@ export default function Product() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className={`grid aspect-square place-items-center overflow-hidden rounded-xl3 bg-gradient-to-br ${p.gradient} shadow-soft`}
+            className={`relative w-full overflow-hidden rounded-xl3 bg-gradient-to-br ${p.gradient} shadow-soft`}
+            style={{ aspectRatio: "4/3" }}
           >
             {images.length ? (
-              <img src={images[activeImg]?.url} alt={p.name} className="h-full w-full object-cover" />
+              <img src={images[activeImg]?.url} alt={p.name} className="h-full w-full object-contain" />
             ) : (
-              <span className="text-[9rem]">{p.emoji}</span>
+              <span className="absolute inset-0 grid place-items-center text-[9rem]">{p.emoji}</span>
             )}
           </motion.div>
           {images.length > 1 && (
@@ -182,9 +183,8 @@ export default function Product() {
 
           <motion.div variants={fadeUp} className="mt-8 space-y-2 border-t border-blush-200/50 pt-6 font-serif text-base text-ink-soft">
             {data.material && <p>🧶 Material: {data.material}</p>}
-            <p>🚚 Ships in 3–5 days · Free gift wrapping</p>
+            <p>🚚 Ships in 2–3 weeks</p>
             {data.care_instructions && <p>💗 {data.care_instructions}</p>}
-            <p>↩ Easy 7-day returns on ready-made pieces</p>
           </motion.div>
         </motion.div>
       </div>

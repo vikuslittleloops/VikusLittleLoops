@@ -44,14 +44,14 @@ export default function Dashboard() {
       <PageTitle title="Dashboard" subtitle="Your little boutique at a glance" />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard icon={FiDollarSign} label="Revenue" value={inr(c.revenue)} accent="bg-emerald-500/15 text-emerald-300" />
-        <StatCard icon={FiShoppingBag} label="Orders" value={c.orders} accent="bg-sky-500/15 text-sky-300" />
-        <StatCard icon={FiBox} label="Products" value={c.products} accent="bg-blush-500/15 text-blush-300" />
-        <StatCard icon={FiUsers} label="Customers" value={c.customers} accent="bg-violet-500/15 text-violet-300" />
-        <StatCard icon={FiTag} label="Categories" value={c.categories} accent="bg-amber-500/15 text-amber-300" />
-        <StatCard icon={FiBox} label="Published" value={c.published_products} accent="bg-teal-500/15 text-teal-300" />
-        <StatCard icon={FiAlertTriangle} label="Low Stock" value={c.low_stock} accent="bg-red-500/15 text-red-300" />
-        <StatCard icon={FiHeart} label="New Custom" value={c.new_custom_orders} accent="bg-pink-500/15 text-pink-300" />
+        <StatCard icon={FiDollarSign} label="💰 Revenue" value={inr(c.revenue)} accent="bg-emerald-500/15 text-emerald-300" />
+        <StatCard icon={FiShoppingBag} label="🛍️ Orders" value={c.orders} accent="bg-sky-500/15 text-sky-300" />
+        <StatCard icon={FiBox} label="📦 Products" value={c.products} accent="bg-blush-500/15 text-blush-300" />
+        <StatCard icon={FiUsers} label="👥 Customers" value={c.customers} accent="bg-violet-500/15 text-violet-300" />
+        <StatCard icon={FiTag} label="🏷️ Categories" value={c.categories} accent="bg-amber-500/15 text-amber-300" />
+        <StatCard icon={FiBox} label="✅ Published" value={c.published_products} accent="bg-teal-500/15 text-teal-300" />
+        <StatCard icon={FiAlertTriangle} label="⚠️ Low Stock" value={c.low_stock} accent="bg-red-500/15 text-red-300" />
+        <StatCard icon={FiHeart} label="🌸 New Custom" value={c.new_custom_orders} accent="bg-pink-500/15 text-pink-300" />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">

@@ -13,13 +13,13 @@ import { inr } from "@/lib/format";
 import { customerApi } from "@/lib/api";
 
 const schema = z.object({
-  name: z.string().min(2, "Please enter your name"),
-  email: z.string().email("Valid email please"),
-  phone: z.string().min(7, "Please enter a phone number"),
-  address: z.string().min(5, "Please enter your address"),
-  city: z.string().min(2, "City required"),
-  state: z.string().optional(),
-  pincode: z.string().optional(),
+  name: z.string().min(2, "Please enter your full name"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Please enter a valid 10-digit phone number").max(13, "Phone number too long").regex(/^[+\d]+$/, "Phone number must contain only digits"),
+  address: z.string().min(10, "Please enter your complete address (min 10 characters)"),
+  city: z.string().min(2, "City is required"),
+  state: z.string().min(2, "State is required"),
+  pincode: z.string().regex(/^\d{6}$/, "Please enter a valid 6-digit pincode"),
   coupon_code: z.string().optional(),
   notes: z.string().optional(),
 });
@@ -215,16 +215,16 @@ export default function Checkout() {
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
           <h3 className="font-display text-xl">Shipping details</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Full name" error={errors.name}><input className={field} {...register("name")} /></Field>
-            <Field label="Email" error={errors.email}><input type="email" className={field} {...register("email")} /></Field>
-            <Field label="Phone" error={errors.phone}><input className={field} {...register("phone")} /></Field>
-            <Field label="Pincode"><input className={field} {...register("pincode")} /></Field>
+            <Field label="Full name" error={errors.name}><input className={field} placeholder="Your full name" {...register("name")} /></Field>
+            <Field label="Email" error={errors.email}><input type="email" className={field} placeholder="your@email.com" {...register("email")} /></Field>
+            <Field label="Phone" error={errors.phone}><input className={field} placeholder="10-digit mobile number" {...register("phone")} /></Field>
           </div>
-          <Field label="Address" error={errors.address}><textarea rows={2} className={field} {...register("address")} /></Field>
+          <Field label="Address" error={errors.address}><textarea rows={2} className={field} placeholder="House/flat no., Street, Area" {...register("address")} /></Field>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="City" error={errors.city}><input className={field} {...register("city")} /></Field>
-            <Field label="State"><input className={field} {...register("state")} /></Field>
+            <Field label="City" error={errors.city}><input className={field} placeholder="City" {...register("city")} /></Field>
+            <Field label="State" error={errors.state}><input className={field} placeholder="State" {...register("state")} /></Field>
           </div>
+          <Field label="Pincode" error={errors.pincode}><input className={field} placeholder="6-digit pincode" maxLength={6} {...register("pincode")} /></Field>
           <Field label="Coupon code (optional)"><input className={`${field} uppercase`} {...register("coupon_code")} /></Field>
           <Field label="Order notes (optional)"><textarea rows={2} className={field} {...register("notes")} /></Field>
 
