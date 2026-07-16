@@ -193,32 +193,94 @@ export default function About() {
         </section>
 
         {/* ===== GALLERY ===== */}
-        {gallery.length > 0 && (
-          <section className="py-16">
-            <div className="text-center">
-              <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">Little Moments</span>
-              <h2 className="heading-display mt-3 text-[clamp(2rem,4.4vw,3rem)]">From the Atelier</h2>
-            </div>
-            <motion.div
-              variants={stagger}
-              {...reveal}
-              className="mt-12 columns-2 gap-4 md:columns-3 lg:columns-4"
-            >
-              {gallery.map((src, i) => (
-                <motion.div
-                  key={i}
-                  variants={fadeUp}
-                  whileHover={{ scale: 1.03 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="mb-4 block break-inside-avoid overflow-hidden rounded-xl2 shadow-soft"
-                  style={{ display: "block" }}
-                >
-                  <img src={src} alt="" loading="lazy" className="block w-full object-cover transition-transform duration-700 ease-lux hover:scale-105" />
-                </motion.div>
-              ))}
-            </motion.div>
-          </section>
-        )}
+        {gallery.length > 0 && (() => {
+          // Distribute images into columns (JS-based masonry avoids CSS columns + Framer Motion conflict)
+          const colCount = { sm: 2, md: 3, lg: 4 };
+          // We always build 4 columns and hide extras via CSS
+          const cols = [[], [], [], []];
+          gallery.forEach((src, i) => cols[i % 4].push({ src, i }));
+
+          return (
+            <section className="py-16">
+              <div className="text-center">
+                <span className="text-[0.72rem] uppercase tracking-[0.2em] text-olive-deep">Little Moments</span>
+                <h2 className="heading-display mt-3 text-[clamp(2rem,4.4vw,3rem)]">From the Atelier</h2>
+              </div>
+
+              <motion.div
+                variants={stagger}
+                {...reveal}
+                className="mt-12 flex gap-4"
+              >
+                {/* Col 1: always visible */}
+                <div className="flex flex-1 flex-col gap-4">
+                  {cols[0].map(({ src, i }) => (
+                    <motion.div
+                      key={i}
+                      variants={fadeUp}
+                      whileHover={{ scale: 1.03 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden rounded-2xl shadow-soft"
+                    >
+                      <img src={src} alt="" loading="lazy" className="w-full object-cover transition-transform duration-700 ease-lux hover:scale-105" />
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Col 2: always visible */}
+                <div className="flex flex-1 flex-col gap-4 pt-8">
+                  {cols[1].map(({ src, i }) => (
+                    <motion.div
+                      key={i}
+                      variants={fadeUp}
+                      whileHover={{ scale: 1.03 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden rounded-2xl shadow-soft"
+                    >
+                      <img src={src} alt="" loading="lazy" className="w-full object-cover transition-transform duration-700 ease-lux hover:scale-105" />
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Col 3: hidden on mobile */}
+                {cols[2].length > 0 && (
+                  <div className="hidden flex-1 flex-col gap-4 md:flex">
+                    {cols[2].map(({ src, i }) => (
+                      <motion.div
+                        key={i}
+                        variants={fadeUp}
+                        whileHover={{ scale: 1.03 }}
+                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        className="overflow-hidden rounded-2xl shadow-soft"
+                      >
+                        <img src={src} alt="" loading="lazy" className="w-full object-cover transition-transform duration-700 ease-lux hover:scale-105" />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Col 4: hidden below lg */}
+                {cols[3].length > 0 && (
+                  <div className="hidden flex-1 flex-col gap-4 pt-6 lg:flex">
+                    {cols[3].map(({ src, i }) => (
+                      <motion.div
+                        key={i}
+                        variants={fadeUp}
+                        whileHover={{ scale: 1.03 }}
+                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        className="overflow-hidden rounded-2xl shadow-soft"
+                      >
+                        <img src={src} alt="" loading="lazy" className="w-full object-cover transition-transform duration-700 ease-lux hover:scale-105" />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            </section>
+          );
+        })()}
+
+
 
         {/* ===== CTA ===== */}
         <motion.section variants={fadeUp} {...reveal} className="py-20 text-center">
