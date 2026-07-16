@@ -116,8 +116,10 @@ class ProductImageOut(ProductImageIn):
 
 
 class ProductVariantIn(BaseModel):
-    color_id: int | None = None
-    size_id: int | None = None
+    variant_name: str  # Required — e.g. "Red Rose Bag"
+    color_label: str | None = None  # Free-text, e.g. "Dusty Rose"
+    image_url: str | None = None
+    image_public_id: str | None = None
     sku: str | None = None
     price_override: Decimal | None = None
     quantity: int = 0
@@ -126,12 +128,11 @@ class ProductVariantIn(BaseModel):
 class ProductVariantOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    color_id: int | None = None
-    size_id: int | None = None
+    variant_name: str
+    color_label: str | None = None
+    image_url: str | None = None
     sku: str | None = None
     price_override: Decimal | None = None
-    color: ColorOut | None = None
-    size: SizeOut | None = None
 
 
 # ---------- Product ----------

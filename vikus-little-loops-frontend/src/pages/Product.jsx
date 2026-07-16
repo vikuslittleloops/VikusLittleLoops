@@ -56,12 +56,19 @@ export default function Product() {
   const out = p.stock === 0;
   const related = (more?.items || []).filter((x) => x.id !== data.id).slice(0, 4);
 
-  const colorVariants = (data.variants || []).filter((v) => v.color);
+  const productVariants = (data.variants || []).filter((v) => v.variant_name);
 
   // Effective price: use variant's price_override if one is selected, else base price.
   const effectivePrice = selectedVariant?.price_override
     ? Number(selectedVariant.price_override)
     : p.displayPrice;
+
+  // Active image: variant photo takes priority when a variant is selected
+  const activeImageUrl = selectedVariant?.image_url
+    ? selectedVariant.image_url
+    : images.length
+    ? images[activeImg]?.url
+    : null;
 
   const mini = {
     product_id: p.id,
@@ -104,13 +111,14 @@ export default function Product() {
             className={`relative w-full overflow-hidden rounded-xl3 bg-gradient-to-br ${p.gradient} shadow-soft`}
             style={{ aspectRatio: "4/3" }}
           >
-            {images.length ? (
-              <img src={images[activeImg]?.url} alt={p.name} className="h-full w-full object-contain" />
+            {activeImageUrl ? (
+              <img src={activeImageUrl} alt={p.name} className="h-full w-full object-contain" />
             ) : (
               <span className="absolute inset-0 grid place-items-center text-[9rem]">{p.emoji}</span>
             )}
           </motion.div>
-          {images.length > 1 && (
+          {/* Thumbnail strip — only show when no variant with image selected */}
+          {!selectedVariant?.image_url && images.length > 1 && (
             <div className="mt-4 flex flex-wrap gap-3">
               {images.map((im, i) => (
                 <button
@@ -165,37 +173,41 @@ export default function Product() {
             </motion.p>
           )}
 
-          {/* Color Variants */}
-          {colorVariants.length > 0 && (
+          {/* Variants */}
+          {productVariants.length > 0 && (
             <motion.div variants={fadeUp} className="mt-6">
               <p className="mb-3 text-[0.72rem] uppercase tracking-[0.18em] text-ink-soft">
-                Colour
-                {selectedVariant && (
-                  <span className="ml-2 normal-case tracking-normal text-ink font-medium">
-                    — {selectedVariant.color.name}
-                  </span>
-                )}
+                Available options
               </p>
-              <div className="flex flex-wrap gap-3">
-                {colorVariants.map((v) => (
-                  <button
-                    key={v.id}
-                    type="button"
-                    title={v.color.name}
-                    onClick={() => setSelectedVariant(selectedVariant?.id === v.id ? null : v)}
-                    className={`relative h-9 w-9 rounded-full transition-all duration-200 ${
-                      selectedVariant?.id === v.id
-                        ? "ring-2 ring-offset-2 ring-blush-500 scale-110"
-                        : "hover:scale-105 hover:ring-1 hover:ring-blush-300"
-                    }`}
-                    style={{ background: v.color.hex_code || "#d4a4b5" }}
-                  >
-                    {selectedVariant?.id === v.id && (
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold drop-shadow">✓</span>
-                    )}
-                  </button>
-                ))}
+              <div className="flex flex-wrap gap-2">
+                {productVariants.map((v) => {
+                  const active = selectedVariant?.id === v.id;
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setSelectedVariant(active ? null : v)}
+                      className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200 ${
+                        active
+                          ? "border-blush-500 bg-blush-500/10 text-blush-600 font-medium shadow-glow"
+                          : "border-blush-200/60 bg-white/60 text-ink hover:border-blush-400 hover:bg-white"
+                      }`}
+                    >
+                      {v.image_url && (
+                        <img src={v.image_url} alt="" className="h-6 w-6 rounded-full object-cover border border-blush-200/60" />
+                      )}
+                      <span>{v.variant_name}</span>
+                      {v.color_label && (
+                        <span className="text-xs text-ink-soft opacity-70">· {v.color_label}</span>
+                      )}
+                      {active && <span className="ml-0.5 text-blush-500">✓</span>}
+                    </button>
+                  );
+                })}
               </div>
+              {selectedVariant?.price_override && (
+                <p className="mt-2 text-xs text-olive-deep">Price updated for this variant</p>
+              )}
             </motion.div>
           )}
 

@@ -17,8 +17,7 @@ router = APIRouter(prefix="/products", tags=["products"])
 
 _loaders = (
     selectinload(Product.images),
-    selectinload(Product.variants).selectinload(ProductVariant.color),
-    selectinload(Product.variants).selectinload(ProductVariant.size),
+    selectinload(Product.variants),
     selectinload(Product.category),
 )
 
