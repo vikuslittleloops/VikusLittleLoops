@@ -26,6 +26,7 @@ export default function Product() {
 
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
   // Track recently viewed once the product loads.
   useEffect(() => {
@@ -55,13 +56,20 @@ export default function Product() {
   const out = p.stock === 0;
   const related = (more?.items || []).filter((x) => x.id !== data.id).slice(0, 4);
 
+  const colorVariants = (data.variants || []).filter((v) => v.color);
+
+  // Effective price: use variant's price_override if one is selected, else base price.
+  const effectivePrice = selectedVariant?.price_override
+    ? Number(selectedVariant.price_override)
+    : p.displayPrice;
+
   const mini = {
     product_id: p.id,
     slug: p.slug,
     name: p.name,
     image: p.image,
     emoji: p.emoji,
-    price: p.displayPrice,
+    price: effectivePrice,
     stock: p.stock,
   };
 
@@ -129,8 +137,11 @@ export default function Product() {
           </motion.h1>
 
           <motion.div variants={fadeUp} className="mt-5 font-serif text-3xl font-semibold">
-            {inr(p.displayPrice)}
+            {inr(effectivePrice)}
             {p.oldPrice && <span className="ml-3 text-xl font-normal text-warmgray line-through">{inr(p.oldPrice)}</span>}
+            {selectedVariant?.price_override && (
+              <span className="ml-3 text-sm font-normal text-olive-deep">(variant price)</span>
+            )}
           </motion.div>
 
           <motion.p variants={fadeUp} className="mt-3 text-sm">
@@ -154,6 +165,40 @@ export default function Product() {
             </motion.p>
           )}
 
+          {/* Color Variants */}
+          {colorVariants.length > 0 && (
+            <motion.div variants={fadeUp} className="mt-6">
+              <p className="mb-3 text-[0.72rem] uppercase tracking-[0.18em] text-ink-soft">
+                Colour
+                {selectedVariant && (
+                  <span className="ml-2 normal-case tracking-normal text-ink font-medium">
+                    — {selectedVariant.color.name}
+                  </span>
+                )}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {colorVariants.map((v) => (
+                  <button
+                    key={v.id}
+                    type="button"
+                    title={v.color.name}
+                    onClick={() => setSelectedVariant(selectedVariant?.id === v.id ? null : v)}
+                    className={`relative h-9 w-9 rounded-full transition-all duration-200 ${
+                      selectedVariant?.id === v.id
+                        ? "ring-2 ring-offset-2 ring-blush-500 scale-110"
+                        : "hover:scale-105 hover:ring-1 hover:ring-blush-300"
+                    }`}
+                    style={{ background: v.color.hex_code || "#d4a4b5" }}
+                  >
+                    {selectedVariant?.id === v.id && (
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold drop-shadow">✓</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
           {/* Quantity */}
           <motion.div variants={fadeUp} className="mt-7 flex items-center gap-4">
             <div className="flex items-center rounded-full border border-blush-300/60 bg-white/60">
@@ -161,7 +206,7 @@ export default function Product() {
               <span className="w-8 text-center">{qty}</span>
               <button onClick={() => setQty((q) => q + 1)} className="flex h-12 w-12 items-center justify-center text-lg">+</button>
             </div>
-            <span className="font-serif text-lg text-ink-soft">{inr(p.displayPrice * qty)}</span>
+            <span className="font-serif text-lg text-ink-soft">{inr(effectivePrice * qty)}</span>
           </motion.div>
 
           {/* CTA */}

@@ -202,7 +202,7 @@ export default function About() {
             <motion.div
               variants={stagger}
               {...reveal}
-              className="mt-12 columns-2 gap-4 md:columns-3 lg:columns-4 [&>*]:mb-4"
+              className="mt-12 columns-2 gap-4 md:columns-3 lg:columns-4"
             >
               {gallery.map((src, i) => (
                 <motion.div
@@ -210,9 +210,10 @@ export default function About() {
                   variants={fadeUp}
                   whileHover={{ scale: 1.03 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden rounded-xl2 shadow-soft"
+                  className="mb-4 block break-inside-avoid overflow-hidden rounded-xl2 shadow-soft"
+                  style={{ display: "block" }}
                 >
-                  <img src={src} alt="" loading="lazy" className="w-full object-cover transition-transform duration-700 ease-lux hover:scale-105" />
+                  <img src={src} alt="" loading="lazy" className="block w-full object-cover transition-transform duration-700 ease-lux hover:scale-105" />
                 </motion.div>
               ))}
             </motion.div>

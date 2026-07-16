@@ -17,6 +17,9 @@ export const updateCategory = (id, payload) => api.patch(`/categories/${id}`, pa
 export const deleteCategory = (id) => api.delete(`/categories/${id}`).then((r) => r.data);
 
 export const getCollections = () => api.get("/collections").then((r) => r.data);
+
+export const getColors = () => api.get("/colors").then((r) => r.data);
+export const getSizes = () => api.get("/sizes").then((r) => r.data);
 export const createCollection = (payload) => api.post("/collections", payload).then((r) => r.data);
 
 // ---- Coupons ----

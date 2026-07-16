@@ -99,12 +99,16 @@ export default function Reviews({ productId }) {
                 viewport={{ once: true }}
                 className="rounded-xl2 border border-blush-200/50 bg-ivory/70 p-6 shadow-soft"
               >
-                <div className="flex items-center justify-between">
-                  <b className="font-display text-lg font-medium">{r.author_name}</b>
-                  <span className="text-blush-500">{"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}</span>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <b className="font-display text-lg font-medium">{r.author_name}</b>
+                    {r.title && (
+                      <p className="mt-0.5 font-display text-base font-semibold text-ink">{r.title}</p>
+                    )}
+                  </div>
+                  <span className="shrink-0 text-blush-500">{"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}</span>
                 </div>
-                {r.title && <p className="mt-2 font-medium">{r.title}</p>}
-                {r.body && <p className="mt-1 font-serif text-base text-ink-soft">{r.body}</p>}
+                {r.body && <p className="mt-3 font-serif text-base leading-relaxed text-ink-soft">{r.body}</p>}
                 {r.photo_url && (
                   <img
                     src={r.photo_url}
@@ -129,12 +133,21 @@ export default function Reviews({ productId }) {
             <Stars value={form.rating} onChange={(rating) => setForm({ ...form, rating })} />
           </div>
           <div className="mt-4 space-y-3">
-            <input className={field} placeholder="Your name" value={form.author_name}
-              onChange={(e) => setForm({ ...form, author_name: e.target.value })} required />
-            <input className={field} placeholder="Title (optional)" value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value })} />
-            <textarea rows={4} className={field} placeholder="Share your thoughts…" value={form.body}
-              onChange={(e) => setForm({ ...form, body: e.target.value })} />
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-ink-soft">Your name *</label>
+              <input className={field} placeholder="e.g. Priya S." value={form.author_name}
+                onChange={(e) => setForm({ ...form, author_name: e.target.value })} required />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-ink-soft">Review title <span className="normal-case text-ink-soft/60">(optional)</span></label>
+              <input className={field} placeholder="Sum up your experience…" value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })} />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-ink-soft">Your thoughts</label>
+              <textarea rows={4} className={field} placeholder="What did you love? How did it feel?" value={form.body}
+                onChange={(e) => setForm({ ...form, body: e.target.value })} />
+            </div>
 
             {/* Photo upload */}
             {form.photo_url ? (

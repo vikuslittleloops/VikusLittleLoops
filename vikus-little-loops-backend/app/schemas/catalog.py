@@ -130,6 +130,8 @@ class ProductVariantOut(BaseModel):
     size_id: int | None = None
     sku: str | None = None
     price_override: Decimal | None = None
+    color: ColorOut | None = None
+    size: SizeOut | None = None
 
 
 # ---------- Product ----------
