@@ -145,10 +145,18 @@ class ProductImage(Base):
 
 class ProductVariant(Base):
     __tablename__ = "product_variants"
-    __table_args__ = (UniqueConstraint("product_id", "color_id", "size_id", name="uq_variant_combo"),)
+    __table_args__ = (UniqueConstraint("product_id", "variant_name", name="uq_variant_name"),)
 
     id: Mapped[int] = mapped_column(primary_key=True)
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"))
+    # Human-readable name — e.g. "Red Rose Bag", "Pink Rose Bag"
+    variant_name: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    # Free-text color label — e.g. "Dusty Rose", "Sage Green" (not tied to any Color table)
+    color_label: Mapped[str | None] = mapped_column(String(80))
+    # Optional variant-specific photo
+    image_url: Mapped[str | None] = mapped_column(String(500))
+    image_public_id: Mapped[str | None] = mapped_column(String(255))
+    # Legacy FK fields (kept nullable for backwards compatibility)
     color_id: Mapped[int | None] = mapped_column(ForeignKey("colors.id", ondelete="SET NULL"))
     size_id: Mapped[int | None] = mapped_column(ForeignKey("sizes.id", ondelete="SET NULL"))
     sku: Mapped[str | None] = mapped_column(String(80), unique=True, index=True)
